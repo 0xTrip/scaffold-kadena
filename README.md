@@ -1,88 +1,145 @@
-# 🏗 Scaffold-ETH 2
+# 🏗 Scaffold-ETH 2 for Kadena EVM
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM Devnet, making it easier to build and deploy dApps on Kadena's blockchain.
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+## 🚀 Quick Start
 
-⚙️ Built using NextJS, RainbowKit, Foundry/Hardhat, Wagmi, Viem, and Typescript.
+### Prerequisites
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
-
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
-
-## Requirements
-
-Before you begin, you need to install the following tools:
-
-- [Node (>= v20.18.3)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
+- [Node.js](https://nodejs.org/en/) (v18.15.0 or later)
+- [Yarn](https://yarnpkg.com/) (v1.22.19 or later)
 - [Git](https://git-scm.com/downloads)
+- [MetaMask](https://metamask.io/) browser extension
 
-## Quickstart
+### 1. Clone the repository
 
-To get started with Scaffold-ETH 2, follow the steps below:
-
-1. Install the latest version of Scaffold-ETH 2
-
-```
-npx create-eth@latest
+```bash
+git clone https://github.com/0xTrip/scaffold-eth-kadena.git
+cd scaffold-eth-kadena
 ```
 
-This command will install all the necessary packages and dependencies, so it might take a while.
+### 2. Install dependencies
 
-> [!NOTE]
-> You can also initialize your project with one of our extensions to add specific features or starter-kits. Learn more in our [extensions documentation](https://docs.scaffoldeth.io/extensions/).
-
-2. Run a local network in the first terminal:
-
-```
-yarn chain
+```bash
+yarn install
 ```
 
-This command starts a local Ethereum network that runs on your local machine and can be used for testing and development. Learn how to [customize your network configuration](https://docs.scaffoldeth.io/quick-start/environment#1-initialize-a-local-blockchain).
+## 📝 Environment Setup
 
-3. On a second terminal, deploy the test contract:
+### Hardhat Configuration
+
+The hardhat configuration is already set up to work with Kadena Devnet. Key features:
+
+- Pre-configured for Kadena Devnet Chain 0 and Chain 1
+- Simplified deployment process
+- TypeScript contract generation
+
+### Frontend Configuration
+
+The NextJS frontend is pre-configured to connect to your deployed contracts on Kadena Devnet.
+
+## 🔥 Deployment & Development
+
+### Deploy Smart Contracts
+
+To deploy your contracts to Kadena Devnet Chain 0:
+
+```bash
+cd packages/hardhat
+npm run deploy:kadena0
+```
+
+For Kadena Devnet Chain 1:
+
+```bash
+cd packages/hardhat
+npm run deploy:kadena1
+```
+
+### Start the Frontend
+
+```bash
+cd packages/nextjs
+npm run dev
+```
+
+Your application will be available at: http://localhost:3000
+
+## 🦊 Connect MetaMask to Kadena Devnet
+
+1. Open MetaMask and click on the network dropdown at the top
+2. Click "Add Network" > "Add Network Manually"
+3. Enter the following details:
+
+#### For Kadena Devnet Chain 0:
+
+- **Network Name**: Kadena Devnet Chain 0
+- **RPC URL**: https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/0/evm/rpc
+- **Chain ID**: 1789
+- **Currency Symbol**: KDA
+- **Block Explorer URL**: (leave blank)
+
+#### For Kadena Devnet Chain 1:
+
+- **Network Name**: Kadena Devnet Chain 1
+- **RPC URL**: https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/1/evm/rpc
+- **Chain ID**: 1790
+- **Currency Symbol**: KDA
+- **Block Explorer URL**: (leave blank)
+
+## 🚢 Using Your dApp
+
+1. Once your contracts are deployed and the frontend is running, connect your MetaMask wallet to the site
+2. Ensure your MetaMask is connected to the Kadena Devnet
+3. Right now there is a private key with funds hardcoded. If using your own wallet, you will need KDA tokens for gas - these are available through Kadena's devnet faucet.
+4. Interact with your contracts through the UI
+
+## 🧰 Modifying Contracts
+
+1. Edit or add contracts in the `packages/hardhat/contracts` directory
+2. Deploy them using the deployment scripts
+3. Your frontend will automatically update with the new contract interfaces
+
+## 🔍 Project Structure
 
 ```
-yarn deploy
+scaffold-eth-kadena/
+├── packages/
+│   ├── hardhat/                      # Solidity contracts & deployment
+│   │   ├── contracts/                # Smart contract code
+│   │   ├── deploy/                   # Deployment scripts
+│   │   └── hardhat.config.ts         # Hardhat configuration
+│   │
+│   └── nextjs/                       # Frontend application
+│       ├── components/               # React components
+│       ├── pages/                    # Next.js pages
+│       ├── public/                   # Static assets
+│       ├── hooks/                    # Custom React hooks
+│       ├── scaffold.config.ts        # Scaffold-ETH configuration
+│       └── next.config.js            # Next.js configuration
 ```
 
-This command deploys a test smart contract to the local network. You can find more information about how to customize your contract and deployment script in our [documentation](https://docs.scaffoldeth.io/quick-start/environment#2-deploy-your-smart-contract).
+## 🛠️ Troubleshooting
 
-4. On a third terminal, start your NextJS app:
+### Common Issues
 
-```
-yarn start
-```
+1. **Deployment Errors**: Ensure you have the correct RPC URLs in your `.env` file and that the Kadena Devnet is operational
+2. **Connection Issues**: If you can't connect to the Kadena Devnet, check your network settings in MetaMask
+3. **Transaction Failures**: Make sure you have sufficient KDA tokens for gas fees
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+## 📚 Additional Resources
 
-**What's next**:
+- [Kadena Documentation](https://docs.kadena.io/)
+- [Scaffold-ETH 2 Documentation](https://docs.scaffoldeth.io/)
 
-Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:
+## 🙏 Acknowledgments
 
-- Edit your smart contracts
-- Edit your deployment scripts
-- Customize your frontend
-- Edit the app config
-- Writing and running tests
-- [Setting up external services and API keys](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts#configuration-of-third-party-services-for-production-grade-apps)
+- BuidlGuidl and the Scaffold-ETH team for the original framework
 
-## Documentation
+## 📄 License
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn all the technical details and guides of Scaffold-ETH 2.
+MIT
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
+---
 
-## Contributing to Scaffold-ETH 2
-
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+Made with ❤️ by [SolidityDegen](https://x.com/SolidityDegen)
