@@ -1,4 +1,4 @@
-# 🏗 Scaffold-ETH 2 for Kadena EVM
+# 🏗 Scaffold Kadena EVM
 
 A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM Devnet, making it easier to build and deploy dApps on Kadena's blockchain.
 
