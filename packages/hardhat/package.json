@@ -19,11 +19,14 @@
     "lint": "eslint",
     "lint-staged": "eslint",
     "test": "REPORT_GAS=true hardhat test --network hardhat",
-    "verify": "hardhat etherscan-verify"
+    "verify": "hardhat etherscan-verify",
+    "deploy:kadena0": "node scripts/deploy-kadena.js 0",
+    "deploy:kadena1": "node scripts/deploy-kadena.js 1"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
+    "@kadena/hardhat-chainweb": "^1.4.6",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.7",
     "@nomicfoundation/hardhat-ethers": "^3.0.8",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.11",
@@ -37,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^8.27.0",
     "@typescript-eslint/parser": "^8.27.0",
     "chai": "^4.5.0",
+    "dotenv": "^16.5.0",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.4",
@@ -56,7 +60,6 @@
     "@inquirer/password": "^4.0.2",
     "@openzeppelin/contracts": "^5.0.2",
     "@typechain/ethers-v6": "^0.5.1",
-    "dotenv": "^16.4.5",
     "envfile": "^7.1.0",
     "qrcode": "^1.5.4"
   }

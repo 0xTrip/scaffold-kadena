@@ -1,45 +1,80 @@
-import * as chains from "viem/chains";
+import { defineChain } from "viem";
+
+// Define Kadena Devnet Chain 0
+export const kadenaDevnet0 = defineChain({
+  id: 1789,
+  name: "Kadena Devnet Chain 0",
+  network: "kadenaDevnet0",
+  nativeCurrency: {
+    name: "Kadena",
+    symbol: "KDA",
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/0/evm/rpc"],
+    },
+    public: {
+      http: ["https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/0/evm/rpc"],
+    },
+  },
+});
+
+// Define Kadena Devnet Chain 1
+export const kadenaDevnet1 = defineChain({
+  id: 1790,
+  name: "Kadena Devnet Chain 1",
+  network: "kadenaDevnet1",
+  nativeCurrency: {
+    name: "Kadena",
+    symbol: "KDA",
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/1/evm/rpc"],
+    },
+    public: {
+      http: ["https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/1/evm/rpc"],
+    },
+  },
+});
+
+// Add back the DEFAULT_ALCHEMY_API_KEY
+export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 
 export type ScaffoldConfig = {
-  targetNetworks: readonly chains.Chain[];
+  targetNetworks: readonly any[];
   pollingInterval: number;
-  alchemyApiKey: string;
+  alchemyApiKey: string; // Add this back
   rpcOverrides?: Record<number, string>;
   walletConnectProjectId: string;
   onlyLocalBurnerWallet: boolean;
 };
 
-export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
-
 const scaffoldConfig = {
-  // The networks on which your DApp is live
-  targetNetworks: [chains.hardhat],
+  // Only target Kadena devnet chains
+  targetNetworks: [kadenaDevnet0, kadenaDevnet1],
 
-  // The interval at which your front-end polls the RPC servers for new data
-  // it has no effect if you only target the local network (default is 4000)
-  pollingInterval: 30000,
+  // Using a shorter polling interval for devnet
+  pollingInterval: 5000,
 
-  // This is ours Alchemy's default API key.
-  // You can get your own at https://dashboard.alchemyapi.io
-  // It's recommended to store it in an env variable:
-  // .env.local for local testing, and in the Vercel/system env config for live apps.
+  // Add back alchemyApiKey
   alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || DEFAULT_ALCHEMY_API_KEY,
 
-  // If you want to use a different RPC for a specific network, you can add it here.
-  // The key is the chain ID, and the value is the HTTP RPC URL
+  // RPC overrides if needed
   rpcOverrides: {
-    // Example:
-    // [chains.mainnet.id]: "https://mainnet.buidlguidl.com",
+    1789:
+      process.env.RPC_URL_CHAIN0 || "https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/0/evm/rpc",
+    1790:
+      process.env.RPC_URL_CHAIN1 || "https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/1/evm/rpc",
   },
 
-  // This is ours WalletConnect's default project ID.
-  // You can get your own at https://cloud.walletconnect.com
-  // It's recommended to store it in an env variable:
-  // .env.local for local testing, and in the Vercel/system env config for live apps.
+  // WalletConnect project ID (keep for wallet connections)
   walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "3a8170812b534d0ff9d794f19a901d64",
 
-  // Only show the Burner Wallet when running on hardhat network
-  onlyLocalBurnerWallet: true,
+  // Disable local burner wallet
+  onlyLocalBurnerWallet: false,
 } as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;

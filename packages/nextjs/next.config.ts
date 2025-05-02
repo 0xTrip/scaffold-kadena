@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
     config.externals.push("pino-pretty", "lokijs", "encoding");
     return config;
   },
+  // Removed rewrites section that was added for TLS workarounds
 };
 
 const isIpfs = process.env.NEXT_PUBLIC_IPFS_BUILD === "true";

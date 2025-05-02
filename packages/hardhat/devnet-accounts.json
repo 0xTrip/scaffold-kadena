@@ -1,0 +1,14 @@
+{
+  "accounts": [
+    {
+      "privateKey": "0x1a044ba5456f850b08d2e765aa57b4ca0b242049c0c528b537d72ef9e09b7134",
+      "address": "0x03e95Af0fC4971EdCa12E6d2d1540c28314d15d5",
+      "path": "m/44'/1'/0'/0/18"
+    },
+    {
+      "privateKey": "0xad60b8572e3d37cf8305a164f035d90982e554b36eb0dc7ed54839a60107aa0a",
+      "address": "0x3492DA004098d728201fD82657f1207a6E5426bd",
+      "path": "m/44'/1'/0'/0/19"
+    }
+  ]
+}
