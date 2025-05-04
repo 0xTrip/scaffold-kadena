@@ -28,11 +28,10 @@ yarn install
 
 ### Hardhat Configuration
 
-The hardhat configuration is already set up to work with Kadena Devnet. Key features:
+The hardhat configuration is already set up to work with Kadena Devnet via hardhat config. Key features:
 
 - Pre-configured for Kadena Devnet Chain 0 and Chain 1
 - Simplified deployment process
-- TypeScript contract generation
 
 ### Frontend Configuration
 
