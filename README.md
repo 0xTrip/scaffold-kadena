@@ -45,21 +45,21 @@ To deploy your contracts to Kadena Devnet Chain 0:
 
 ```bash
 cd packages/hardhat
-npm run deploy:kadena0
+yarn deploy:kadena0
 ```
 
 For Kadena Devnet Chain 1:
 
 ```bash
 cd packages/hardhat
-npm run deploy:kadena1
+yarn deploy:kadena1
 ```
 
 ### Navigate to the Nextjs Folder and Start the Frontend
 
 ```bash
 cd ../nextjs
-npm run dev
+yarn start
 ```
 
 Your application will be available at: http://localhost:3000
