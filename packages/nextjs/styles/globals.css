@@ -18,23 +18,23 @@
 
   --color-primary: #3CB179;
   --color-primary-content: #FFFFFF;
-  --color-secondary: #2A3142;
+  --color-secondary: #4A5568;
   --color-secondary-content: #FFFFFF;
-  --color-accent: #3CB179;
-  --color-accent-content: #FFFFFF;
+  --color-accent: #50E3A4;
+  --color-accent-content: #1A202C;
   --color-neutral: #333333;
   --color-neutral-content: #FFFFFF;
   --color-base-100: #FFFFFF;
-  --color-base-200: #E5E5E5;
-  --color-base-300: #CCCCCC;
-  --color-base-content: #333333;
-  --color-info: #3CB179;
+  --color-base-200: #F0FFF4;
+  --color-base-300: #CCEDE0;
+  --color-base-content: #1A202C;
+  --color-info: #60DAA8;
   --color-success: #3CB179;
   --color-warning: #F5A623;
   --color-error: #E74C3C;
 
-  --radius-field: 9999rem;
-  --radius-box: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
   --tt-tailw: 6px;
 }
 
@@ -43,36 +43,28 @@
 
   --color-primary: #3CB179;
   --color-primary-content: #FFFFFF;
-  --color-secondary: #2A3142;
+  --color-secondary: #394150;
   --color-secondary-content: #FFFFFF;
-  --color-accent: #3CB179;
-  --color-accent-content: #FFFFFF;
-  --color-neutral: #E5E5E5;
-  --color-neutral-content: #2A3142;
-  --color-base-100: #2A3142;
-  --color-base-200: #1E2531;
-  --color-base-300: #151A24;
-  --color-base-content: #FFFFFF;
-  --color-info: #3CB179;
+  --color-accent: #50E3A4;
+  --color-accent-content: #1A202C;
+  --color-neutral: #D1FFE8;
+  --color-neutral-content: #1A202C;
+  --color-base-100: #1A202C;
+  --color-base-200: #151A24;
+  --color-base-300: #0F131A;
+  --color-base-content: #D1FFE8;
+  --color-info: #60DAA8;
   --color-success: #3CB179;
   --color-warning: #F5A623;
   --color-error: #E74C3C;
 
-  --radius-field: 9999rem;
-  --radius-box: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
 
   --tt-tailw: 6px;
   --tt-bg: var(--color-primary);
 }
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
   *,
   ::after,
@@ -88,6 +80,7 @@
 
   body {
     min-height: 100vh;
+    background: linear-gradient(135deg, #151A24 0%, #1A202C 100%);
   }
 
   h1,
@@ -96,6 +89,7 @@
   h4 {
     margin-bottom: 0.5rem;
     line-height: 1;
+    color: var(--color-primary);
   }
 }
 
@@ -105,17 +99,93 @@
 }
 
 .btn {
-  @apply shadow-md;
+  @apply shadow-md transition-all duration-200;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  border: none;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(110%);
+  box-shadow: 0 4px 12px rgba(60, 177, 121, 0.3);
 }
 
 .btn.btn-ghost {
   @apply shadow-none;
+  background: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn.btn-ghost:hover {
+  background: rgba(60, 177, 121, 0.1);
 }
 
 .link {
   text-underline-offset: 2px;
+  color: var(--color-accent);
+  transition: all 0.2s ease;
 }
 
 .link:hover {
   opacity: 80%;
+  text-shadow: 0 0 8px rgba(80, 227, 164, 0.5);
+}
+
+.card {
+  border: 1px solid rgba(60, 177, 121, 0.2);
+  background: rgba(26, 32, 44, 0.7);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(60, 177, 121, 0.2);
+  border-color: rgba(60, 177, 121, 0.5);
+}
+
+/* Fun icon animations */
+.icon {
+  transition: all 0.3s ease;
+}
+
+.icon:hover {
+  transform: scale(1.1) rotate(5deg);
+  filter: drop-shadow(0 0 8px rgba(80, 227, 164, 0.6));
+}
+
+/* Glow effect for address display */
+.address-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(60, 177, 121, 0.3);
+  background: rgba(26, 32, 44, 0.5);
+}
+
+.address-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(80, 227, 164, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shine 4s infinite;
+}
+
+@keyframes shine {
+  from {
+    transform: translateX(-100%) rotate(30deg);
+  }
+  to {
+    transform: translateX(100%) rotate(30deg);
+  }
 }
