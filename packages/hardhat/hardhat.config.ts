@@ -9,6 +9,7 @@ import { task } from "hardhat/config";
 import generateTsAbis from "./scripts/generateTsAbis";
 
 // Removed: process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+// TLS/SSL issues have been fixed
 
 // Get active chain from environment variables
 const activeChain = process.env.ACTIVE_CHAIN || "0";

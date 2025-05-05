@@ -14,8 +14,8 @@ A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM Devnet, 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/0xTrip/scaffold-eth-kadena.git
-cd scaffold-eth-kadena
+git clone https://github.com/0xTrip/scaffold-kadena.git
+cd scaffold-kadena
 ```
 
 ### 2. Install dependencies
@@ -28,14 +28,17 @@ yarn install
 
 ### Hardhat Configuration
 
-The hardhat configuration is already set up to work with Kadena Devnet via hardhat config. Key features:
+The hardhat configuration is already set up to work with Kadena Devnet. This is a temporary hard code of .env variables via hardhat.config. 
 
-- Pre-configured for Kadena Devnet Chain 0 and Chain 1
+Users of this repo share a private key loaded with funds, but you can swap out the key if desired. Key features:
+
+- Pre-configured RPCs for Kadena Devnet Chain 0 and Chain 1
 - Simplified deployment process
+- Account loaded with funds
 
 ### Frontend Configuration
 
-The NextJS frontend is pre-configured to connect to your deployed contracts on Kadena Devnet.
+The NextJS frontend is pre-configured to connect to your deployed contracts on Kadena Devnet. Deployment via the script will generate typings.
 
 ## 🔥 Deployment & Development
 
@@ -117,14 +120,6 @@ scaffold-eth-kadena/
 │       ├── scaffold.config.ts        # Scaffold-ETH configuration
 │       └── next.config.js            # Next.js configuration
 ```
-
-## 🛠️ Troubleshooting
-
-### Common Issues
-
-1. **Deployment Errors**: Ensure you have the correct RPC URLs in your `.env` file and that the Kadena Devnet is operational
-2. **Connection Issues**: If you can't connect to the Kadena Devnet, check your network settings in MetaMask
-3. **Transaction Failures**: Make sure you have sufficient KDA tokens for gas fees
 
 ## 📚 Additional Resources
 
