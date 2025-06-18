@@ -43,31 +43,6 @@ cd scaffold-kadena
 yarn install
 ```
 
-## 📝 Environment Setup
-
-### Environment Variables (.env)
-
-Create a `.env` file in the `packages/hardhat` directory:
-
-```bash
-# For testnet deployment (get these from team's LastPass)
-DEPLOYER_PRIVATE_KEY=0x...
-FAUCET_PRIVATE_KEY=0x...
-CREATE2_SALT_SEED=...
-
-# Optional: Override default environment
-# HK_ACTIVE_CHAINWEB_NAME=testnet
-```
-
-### Hardhat Configuration
-
-The project now uses the **latest @kadena/hardhat-chainweb plugin** with advanced features:
-
-- **Auto-generated networks:** All 5 chains per environment are created automatically
-- **Dynamic environment switching:** Use `--chainweb` flag to switch between sandbox/devnet/testnet
-- **Built-in contract verification:** Blockscout integration for all environments
-- **Shared accounts:** devnet-accounts.json provides funded accounts for development
-
 **Supported Environments:**
 - `sandbox` - Local development (chains 20-24, chain IDs 1789-1793)
 - `devnet` - Hosted development (chains 20-24, chain IDs 1789-1793) 
@@ -178,13 +153,6 @@ Each environment has its own Blockscout instance for contract verification and e
 yarn hardhat deploy --chainweb sandbox
 # 3. Verify contracts  
 yarn hardhat verify --chainweb sandbox --network sandbox20 <address>
-```
-
-### Staging (Devnet)
-```bash
-# Deploy to hosted devnet
-yarn hardhat deploy --chainweb devnet
-yarn hardhat verify --chainweb devnet --network devnet20 <address>
 ```
 
 ### Production Testing (Testnet)
