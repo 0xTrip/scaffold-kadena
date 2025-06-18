@@ -1,18 +1,25 @@
 # 🏗 Scaffold Kadena (EVM Chains)
 
-A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM Devnet, making it easier to build and deploy dApps on Kadena's blockchain.
+A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM networks, making it easier to build and deploy dApps on Kadena's blockchain across multiple environments.
 
 ## ✨ Key Features
 
 **Kadena-Specific Dependencies:**
-- `@kadena/hardhat-chainweb` - For Kadena EVM chain interaction
+- `@kadena/hardhat-chainweb` - For Kadena EVM chain interaction with multi-environment support
 - `@kadena/hardhat-kadena-create2` - For CREATE2 deployments on Kadena
 - `@nomicfoundation/hardhat-toolbox` & `@openzeppelin/contracts` - Modern Hardhat essentials
 
 **Enhanced Development Scripts:**
-- Kadena network-specific deployment scripts (`deploy:sandbox`, `deploy:devnet`, `deploy:testnet`)
-- Network-specific verification scripts (`verify:devnet`, `verify:testnet`)
+- Multi-environment deployment support (sandbox, devnet, testnet)
+- **NEW:** Smart contract verification on Blockscout across all environments
+- **NEW:** Dynamic environment switching with `--chainweb` CLI flag
+- **NEW:** Support for all 5 Kadena EVM chains per environment
 - Contract quality scripts (`check:contracts`, `tidy:contracts`)
+
+**Multi-Environment Support:**
+- **Sandbox (Local):** `http://localhost:1848` - For local development
+- **Devnet (Hosted):** `https://evm-devnet.kadena.network` - For staging/testing
+- **Testnet:** `https://evm-testnet.chainweb.com` - For production testing
 
 ## 🚀 Quick Start
 
@@ -38,39 +45,77 @@ yarn install
 
 ## 📝 Environment Setup
 
+### Environment Variables (.env)
+
+Create a `.env` file in the `packages/hardhat` directory:
+
+```bash
+# For testnet deployment (get these from team's LastPass)
+DEPLOYER_PRIVATE_KEY=0x...
+FAUCET_PRIVATE_KEY=0x...
+CREATE2_SALT_SEED=...
+
+# Optional: Override default environment
+# HK_ACTIVE_CHAINWEB_NAME=testnet
+```
+
 ### Hardhat Configuration
 
-The hardhat configuration is already set up to work with Kadena Devnet. This is a temporary hard code of .env variables via hardhat.config. 
+The project now uses the **latest @kadena/hardhat-chainweb plugin** with advanced features:
 
-Users of this repo share a private key loaded with funds, but you can swap out the key if desired. Key features:
+- **Auto-generated networks:** All 5 chains per environment are created automatically
+- **Dynamic environment switching:** Use `--chainweb` flag to switch between sandbox/devnet/testnet
+- **Built-in contract verification:** Blockscout integration for all environments
+- **Shared accounts:** devnet-accounts.json provides funded accounts for development
 
-- Pre-configured RPCs for Kadena Devnet Chain 0 and Chain 1
-- Simplified deployment process
-- Account loaded with funds
-
-### Frontend Configuration
-
-The NextJS frontend is pre-configured to connect to your deployed contracts on Kadena Devnet. Deployment via the script will generate typings.
+**Supported Environments:**
+- `sandbox` - Local development (chains 20-24, chain IDs 1789-1793)
+- `devnet` - Hosted development (chains 20-24, chain IDs 1789-1793) 
+- `testnet` - Production testing (chains 20-24, chain IDs 5920-5924)
 
 ## 🔥 Deployment & Development
 
 ### Deploy Smart Contracts
 
-To deploy your contracts to Kadena Devnet Chain 0:
-
+**Deploy to default environment (testnet):**
 ```bash
 cd packages/hardhat
-yarn deploy:kadena0
+yarn hardhat deploy
 ```
 
-For Kadena Devnet Chain 1:
-
+**Deploy to specific environment:**
 ```bash
-cd packages/hardhat
-yarn deploy:kadena1
+# Deploy to sandbox (local)
+yarn hardhat deploy --chainweb sandbox
+
+# Deploy to devnet (hosted)
+yarn hardhat deploy --chainweb devnet
+
+# Deploy to testnet
+yarn hardhat deploy --chainweb testnet
 ```
 
-### Navigate to the Nextjs Folder and Start the Frontend
+**Deploy to specific chain:**
+```bash
+# Deploy to sandbox chain 20
+yarn hardhat deploy --chainweb sandbox --network sandbox20
+
+# Deploy to testnet chain 22
+yarn hardhat deploy --chainweb testnet --network testnet22
+```
+
+### Verify Contracts on Blockscout
+
+**Automatic verification** (works with any environment):
+```bash
+# Verify on current environment
+yarn hardhat verify --network testnet20 <contract-address>
+
+# Verify on different environment
+yarn hardhat verify --chainweb devnet --network devnet21 <contract-address>
+```
+
+### Start the Frontend
 
 ```bash
 cd ../nextjs
@@ -79,50 +124,96 @@ yarn start
 
 Your application will be available at: http://localhost:3000
 
-## 🦊 Connect MetaMask to Kadena Devnet
+## 🦊 Connect MetaMask to Kadena Networks
 
-1. Open MetaMask and click on the network dropdown at the top
-2. Click "Add Network" > "Add Network Manually"
-3. Enter the following details:
+The project supports **5 chains per environment**. Add any or all of them to MetaMask:
 
-#### For Kadena Devnet Chain 0:
+### Testnet (Production Testing)
+- **Chain 20**: Chain ID `5920`, RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/20/evm/rpc`
+- **Chain 21**: Chain ID `5921`, RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/21/evm/rpc`
+- **Chain 22**: Chain ID `5922`, RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/22/evm/rpc`
+- **Chain 23**: Chain ID `5923`, RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/23/evm/rpc`
+- **Chain 24**: Chain ID `5924`, RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/24/evm/rpc`
 
-- **Network Name**: Kadena Devnet Chain 0
-- **RPC URL**: https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/0/evm/rpc
-- **Chain ID**: 1789
+### Devnet (Hosted Development)
+- **Chain 20**: Chain ID `1789`, RPC: `https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/20/evm/rpc`
+- **Chain 21**: Chain ID `1790`, RPC: `https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/21/evm/rpc`
+- **Chain 22**: Chain ID `1791`, RPC: `https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/22/evm/rpc`
+- **Chain 23**: Chain ID `1792`, RPC: `https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/23/evm/rpc`
+- **Chain 24**: Chain ID `1793`, RPC: `https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/24/evm/rpc`
+
+### Sandbox (Local Development)
+- **Chain 20**: Chain ID `1789`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/20/evm/rpc`
+- **Chain 21**: Chain ID `1790`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/21/evm/rpc`
+- **Chain 22**: Chain ID `1791`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/22/evm/rpc`
+- **Chain 23**: Chain ID `1792`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/23/evm/rpc`
+- **Chain 24**: Chain ID `1793`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/24/evm/rpc`
+
+**For all networks:**
 - **Currency Symbol**: KDA
-- **Block Explorer URL**: (leave blank)
+- **Block Explorer**: See respective Blockscout instances per environment
 
-#### For Kadena Devnet Chain 1:
+## 🔍 Contract Verification & Block Explorers
 
-- **Network Name**: Kadena Devnet Chain 1
-- **RPC URL**: https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/1/evm/rpc
-- **Chain ID**: 1790
-- **Currency Symbol**: KDA
-- **Block Explorer URL**: (leave blank)
+Each environment has its own Blockscout instance for contract verification and exploration:
+
+- **Testnet**: `http://chain-{cid}.evm-testnet-blockscout.chainweb.com` (e.g., chain-20.evm-testnet-blockscout.chainweb.com)
+- **Devnet**: `http://chain-{cid}.evm.kadena.network:8000` 
+- **Sandbox**: `http://chain-{cid}.evm.kadena.local:8000`
 
 ## 🚢 Using Your dApp
 
-1. Once your contracts are deployed and the frontend is running, connect your MetaMask wallet to the site
-2. Ensure your MetaMask is connected to the Kadena Devnet
-3. Right now there is a private key with funds hardcoded. If using your own wallet, you will need KDA tokens for gas - these are available through Kadena's devnet faucet.
-4. Interact with your contracts through the UI
+1. Deploy contracts to your preferred environment using the commands above
+2. Start the frontend and connect MetaMask to the appropriate Kadena network
+3. **Funded accounts** are available through `devnet-accounts.json` for development
+4. **For testnet**, you'll need your own funded accounts (see Environment Variables section)
+5. Interact with your contracts through the UI
 
-## 🧰 Modifying Contracts
+## 🧰 Development Workflow
 
-1. Edit or add contracts in the `packages/hardhat/contracts` directory
-2. Deploy them using the deployment scripts
-3. Your frontend will automatically update with the new contract interfaces
+### Local Development (Sandbox)
+```bash
+# 1. Start local Kadena node (separately)
+# 2. Deploy contracts
+yarn hardhat deploy --chainweb sandbox
+# 3. Verify contracts  
+yarn hardhat verify --chainweb sandbox --network sandbox20 <address>
+```
+
+### Staging (Devnet)
+```bash
+# Deploy to hosted devnet
+yarn hardhat deploy --chainweb devnet
+yarn hardhat verify --chainweb devnet --network devnet20 <address>
+```
+
+### Production Testing (Testnet)
+```bash
+# Deploy to testnet (requires .env setup)
+yarn hardhat deploy --chainweb testnet
+yarn hardhat verify --chainweb testnet --network testnet20 <address>
+```
+
+### Multi-Chain Deployments
+Deploy the same contract across multiple chains:
+```bash
+# Deploy to all chains in testnet
+for chain in {20..24}; do
+  yarn hardhat deploy --chainweb testnet --network "testnet$chain"
+done
+```
 
 ## 🔍 Project Structure
 
 ```
-scaffold-eth-kadena/
+scaffold-kadena/
 ├── packages/
 │   ├── hardhat/                      # Solidity contracts & deployment
 │   │   ├── contracts/                # Smart contract code
 │   │   ├── deploy/                   # Deployment scripts
-│   │   └── hardhat.config.ts         # Hardhat configuration
+│   │   ├── devnet-accounts.json      # Funded development accounts
+│   │   ├── .env                      # Environment variables (create this)
+│   │   └── hardhat.config.ts         # Multi-environment Hardhat configuration
 │   │
 │   └── nextjs/                       # Frontend application
 │       ├── components/               # React components
@@ -133,14 +224,26 @@ scaffold-eth-kadena/
 │       └── next.config.js            # Next.js configuration
 ```
 
+## 🆕 What's New in This Version
+
+- **🔄 Environment Switching**: Switch between sandbox/devnet/testnet with `--chainweb` flag
+- **✅ Contract Verification**: Built-in Blockscout verification for all environments  
+- **🌐 5-Chain Support**: Full support for chains 20-24 in each environment
+- **🔧 Simplified Config**: Single hardhat.config.ts handles all environments
+- **🏗️ Latest Plugin**: Uses updated @kadena/hardhat-chainweb with advanced features
+- **🔑 Environment Variables**: Proper .env support for sensitive keys
+
 ## 📚 Additional Resources
 
 - [Kadena Documentation](https://docs.kadena.io/)
+- [Kadena EVM Documentation](https://docs.kadena.io/build/frontend/kadena-client)
 - [Scaffold-ETH 2 Documentation](https://docs.scaffoldeth.io/)
+- [Hardhat Kadena Plugin](https://github.com/kadena-io/hardhat-kadena-plugin)
 
 ## 🙏 Acknowledgments
 
 - BuidlGuidl and the Scaffold-ETH team for the original framework
+- Kadena team for the EVM integration and tooling
 
 ## 📄 License
 
