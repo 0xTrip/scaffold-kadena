@@ -1,6 +1,6 @@
 {
   "name": "@se-2/hardhat",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "scripts": {
     "account": "hardhat run scripts/listAccount.ts",
     "account:generate": "hardhat run scripts/generateAccount.ts",
@@ -27,14 +27,22 @@
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
     "@kadena/hardhat-chainweb": "^1.4.6",
+    "@kadena/hardhat-kadena-create2": "^1.0.1",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.7",
     "@nomicfoundation/hardhat-ethers": "^3.0.8",
+    "@nomicfoundation/hardhat-ignition": "^0.15.5",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.5",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.11",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@nomicfoundation/hardhat-verify": "^2.0.10",
+    "@nomicfoundation/ignition-core": "^0.15.5",
     "@typechain/ethers-v5": "^11.1.2",
+    "@typechain/ethers-v6": "^0.5.1",
     "@typechain/hardhat": "^9.1.0",
+    "@types/chai": "^4.3.11",
     "@types/eslint": "^9.6.1",
     "@types/mocha": "^10.0.10",
+    "@types/node": "^20.11.17",
     "@types/prettier": "^3.0.0",
     "@types/qrcode": "^1.5.5",
     "@typescript-eslint/eslint-plugin": "^8.27.0",
@@ -48,18 +56,18 @@
     "hardhat": "^2.22.10",
     "hardhat-deploy": "^0.12.4",
     "hardhat-deploy-ethers": "^0.4.2",
-    "hardhat-gas-reporter": "^2.2.1",
+    "hardhat-gas-reporter": "^2.3.0",
     "prettier": "^3.5.3",
     "prettier-plugin-solidity": "^1.4.1",
     "solidity-coverage": "^0.8.13",
     "ts-node": "^10.9.1",
     "typechain": "^8.3.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "web3": "^4.15.0"
   },
   "dependencies": {
     "@inquirer/password": "^4.0.2",
-    "@openzeppelin/contracts": "^5.0.2",
-    "@typechain/ethers-v6": "^0.5.1",
+    "@openzeppelin/contracts": "^5.3.0",
     "envfile": "^7.1.0",
     "qrcode": "^1.5.4"
   }
