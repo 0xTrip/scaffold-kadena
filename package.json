@@ -1,7 +1,11 @@
 {
-  "name": "se-2",
-  "version": "0.0.1",
+  "name": "scaffold-kadena",
+  "version": "0.0.3",
+  "repository": "https://github.com/0xTrip/scaffold-kadena",
+  "description": "A developer toolkit for building and deploying dApps on Kadena EVM",
+  "main": "index.js",
   "private": true,
+  "type": "commonjs",
   "workspaces": {
     "packages": [
       "packages/hardhat",
@@ -13,9 +17,13 @@
     "account:import": "yarn workspace @se-2/hardhat account:import",
     "account:generate": "yarn workspace @se-2/hardhat account:generate",
     "account:reveal-pk": "yarn workspace @se-2/hardhat account:reveal-pk",
+    "build": "yarn hardhat:compile",
     "chain": "yarn hardhat:chain",
     "compile": "yarn hardhat:compile",
     "deploy": "yarn hardhat:deploy",
+    "deploy:sandbox": "yarn hardhat:deploy --chainweb sandbox",
+    "deploy:devnet": "yarn hardhat:deploy --chainweb devnet", 
+    "deploy:testnet": "yarn hardhat:deploy --chainweb testnet",
     "fork": "yarn hardhat:fork",
     "format": "yarn next:format && yarn hardhat:format",
     "generate": "yarn account:generate",
@@ -44,16 +52,43 @@
     "precommit": "lint-staged",
     "start": "yarn workspace @se-2/nextjs dev",
     "test": "yarn hardhat:test",
+    "check:contracts": "yarn workspace @se-2/hardhat lint",
+    "tidy:contracts": "yarn workspace @se-2/hardhat format",
+    "verify": "yarn hardhat:verify",
+    "verify:devnet": "yarn hardhat:verify --chainweb devnet",
+    "verify:testnet": "yarn hardhat:verify --chainweb testnet",
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
-    "ipfs": "yarn workspace @se-2/nextjs ipfs",
     "vercel:login": "yarn workspace @se-2/nextjs vercel:login",
-    "verify": "yarn hardhat:verify"
+    "ipfs": "yarn workspace @se-2/nextjs ipfs"
   },
+  "keywords": [
+    "kadena",
+    "evm",
+    "scaffold",
+    "dapp",
+    "hardhat",
+    "nextjs",
+    "ethereum",
+    "solidity",
+    "web3"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
+    "@kadena/hardhat-chainweb": "^1.4.6",
+    "@kadena/hardhat-kadena-create2": "^1.0.1",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.3.0",
+    "dotenv": "^16.5.0",
+    "hardhat": "^2.23.0",
     "husky": "^9.1.6",
-    "lint-staged": "^15.2.10"
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.5.3",
+    "prettier-plugin-solidity": "^1.4.3",
+    "solhint": "^5.1.0",
+    "solhint-plugin-prettier": "^0.1.0"
   },
   "engines": {
     "node": ">=20.18.3"

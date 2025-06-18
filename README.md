@@ -2,6 +2,18 @@
 
 A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM Devnet, making it easier to build and deploy dApps on Kadena's blockchain.
 
+## ✨ Key Features
+
+**Kadena-Specific Dependencies:**
+- `@kadena/hardhat-chainweb` - For Kadena EVM chain interaction
+- `@kadena/hardhat-kadena-create2` - For CREATE2 deployments on Kadena
+- `@nomicfoundation/hardhat-toolbox` & `@openzeppelin/contracts` - Modern Hardhat essentials
+
+**Enhanced Development Scripts:**
+- Kadena network-specific deployment scripts (`deploy:sandbox`, `deploy:devnet`, `deploy:testnet`)
+- Network-specific verification scripts (`verify:devnet`, `verify:testnet`)
+- Contract quality scripts (`check:contracts`, `tidy:contracts`)
+
 ## 🚀 Quick Start
 
 ### Prerequisites
