@@ -7,18 +7,17 @@ A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM networks
 **Kadena-Specific Dependencies:**
 - `@kadena/hardhat-chainweb` - For Kadena EVM chain interaction with multi-environment support
 - `@kadena/hardhat-kadena-create2` - For CREATE2 deployments on Kadena
-- `@nomicfoundation/hardhat-toolbox` & `@openzeppelin/contracts` - Modern Hardhat essentials
 
 **Enhanced Development Scripts:**
-- Multi-environment deployment support (sandbox, devnet, testnet)
-- **NEW:** Smart contract verification on Blockscout across all environments
-- **NEW:** Dynamic environment switching with `--chainweb` CLI flag
-- **NEW:** Support for all 5 Kadena EVM chains per environment
+- Multi-environment deployment support (sandbox, devnet (soon to be removed), testnet)
+- Smart contract verification on Blockscout across all environments
+- Dynamic environment switching with `--chainweb` CLI flag
+- Support for all 5 Kadena EVM chains per environment
 - Contract quality scripts (`check:contracts`, `tidy:contracts`)
 
 **Multi-Environment Support:**
 - **Sandbox (Local):** `http://localhost:1848` - For local development
-- **Devnet (Hosted):** `https://evm-devnet.kadena.network` - For staging/testing
+- **Devnet (Hosted):** `https://evm-devnet.kadena.network` - For staging/testing (soon to be removed)
 - **Testnet:** `https://evm-testnet.chainweb.com` - For production testing
 
 ## 🚀 Quick Start
