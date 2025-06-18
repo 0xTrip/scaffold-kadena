@@ -8,13 +8,13 @@ node_modules
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-yarn.lock
 
 # eslint
 .eslintcache
 
 # misc
 .DS_Store
+notes.md
 
 # IDE
 .vscode

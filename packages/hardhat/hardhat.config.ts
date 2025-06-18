@@ -1,78 +1,72 @@
-import * as dotenv from "dotenv";
-dotenv.config();
+import "@nomicfoundation/hardhat-toolbox";
+import "@kadena/hardhat-chainweb";
+import "@kadena/hardhat-kadena-create2";
+import "dotenv/config";
+import { readFileSync } from "fs";
 import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-ethers";
-import "@typechain/hardhat";
-import "hardhat-deploy";
-import "hardhat-deploy-ethers";
-import { task } from "hardhat/config";
-import generateTsAbis from "./scripts/generateTsAbis";
 
-// Removed: process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-// TLS/SSL issues have been fixed
-
-// Get active chain from environment variables
-const activeChain = process.env.ACTIVE_CHAIN || "0";
-const deployerPrivateKey =
-  process.env.DEPLOYER_PRIVATE_KEY || "0xad60b8572e3d37cf8305a164f035d90982e554b36eb0dc7ed54839a60107aa0a";
+const devnetAccounts = JSON.parse(readFileSync("./devnet-accounts.json", "utf-8"));
 
 const config: HardhatUserConfig = {
   solidity: {
-    compilers: [
-      {
-        version: "0.8.20",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 200,
-          },
-        },
+    version: "0.8.28",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 1000,
       },
-    ],
-  },
-  defaultNetwork: `kadenaDevnet${activeChain}`,
-  namedAccounts: {
-    deployer: {
-      default: 0,
-      kadenaDevnet0: 0,
-      kadenaDevnet1: 0,
+      evmVersion: "prague",
     },
   },
-  networks: {
-    // Kadena Devnet Chain 0
-    kadenaDevnet0: {
-      url:
-        process.env.RPC_URL_CHAIN0 || "https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/0/evm/rpc",
-      chainId: 1789,
-      accounts: [deployerPrivateKey],
-      timeout: 60000,
-      gas: 8000000,
-      gasPrice: "auto",
-      httpHeaders: {
-        "Content-Type": "application/json",
-      },
-    },
-    // Kadena Devnet Chain 1
-    kadenaDevnet1: {
-      url:
-        process.env.RPC_URL_CHAIN1 || "https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/1/evm/rpc",
-      chainId: 1790,
-      accounts: [deployerPrivateKey],
-      timeout: 60000,
-      gas: 8000000,
-      gasPrice: "auto",
-      httpHeaders: {
-        "Content-Type": "application/json",
-      },
-    },
-  },
-  // Removed unnecessary configurations
-};
 
-// Extend the deploy task
-task("deploy").setAction(async (args, hre, runSuper) => {
-  await runSuper(args);
-  await generateTsAbis(hre);
-});
+  // default environment is Kadena EVM testnet (can be overridden in here, or with --chainweb flag)
+  defaultChainweb: "testnet",
+
+  chainweb: {
+    hardhat: {
+      chains: 2,
+    },
+    sandbox: {
+      type: "external",
+      chains: 5,
+      accounts: devnetAccounts.accounts.map((account: { privateKey: string }) => account.privateKey),
+      chainIdOffset: 1789,
+      chainwebChainIdOffset: 20,
+      externalHostUrl: "http://localhost:1848/chainweb/0.0/evm-development",
+      // config for sandbox when running locally
+      etherscan: {
+        apiKey: "abc", // Any non-empty string works for Blockscout
+        apiURLTemplate: "http://chain-{cid}.evm.kadena.local:8000/api/",
+        browserURLTemplate: "http://chain-{cid}.evm.kadena.local:8000/",
+      },
+    },
+    devnet: {
+      type: "external",
+      chains: 5,
+      accounts: devnetAccounts.accounts.map((account: { privateKey: string }) => account.privateKey),
+      chainIdOffset: 1789,
+      chainwebChainIdOffset: 20,
+      externalHostUrl: "https://evm-devnet.kadena.network/chainweb/0.0/evm-development",
+      etherscan: {
+        apiKey: "abc",
+        apiURLTemplate: "http://chain-{cid}.evm.kadena.network:8000/api/",
+        browserURLTemplate: "http://chain-{cid}.evm.kadena.network:8000",
+      },
+    },
+    testnet: {
+      type: "external",
+      chains: 5,
+      accounts: [process.env.DEPLOYER_PRIVATE_KEY, process.env.FAUCET_PRIVATE_KEY],
+      chainIdOffset: 5920,
+      chainwebChainIdOffset: 20,
+      externalHostUrl: "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet",
+      etherscan: {
+        apiKey: "abc",
+        apiURLTemplate: "http://chain-{cid}.evm-testnet-blockscout.chainweb.com/api/",
+        browserURLTemplate: "http://chain-{cid}.evm-testnet-blockscout.chainweb.com",
+      },
+    },
+  },
+};
 
 export default config;
