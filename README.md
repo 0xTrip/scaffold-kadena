@@ -8,10 +8,6 @@ A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM networks
 - `@kadena/hardhat-chainweb` - For Kadena EVM chain interaction with multi-environment support
 - `@kadena/hardhat-kadena-create2` - For CREATE2 deployments on Kadena
 
-**Enhanced Development Scripts:**
-- Multi-environment deployment support (local, sandbox, testnet)
-- Smart contract verification on Blockscout across all environments
-
 **Multi-Environment Support:**
 - **Hardhat (Local)**
 - **[Sandbox](https://github.com/kadena-io/kadena-evm-sandbox) (Local):** `http://localhost:1848` - For local development with testnet constraints
