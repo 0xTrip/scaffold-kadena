@@ -40,11 +40,6 @@ cd scaffold-kadena
 ```bash
 yarn install
 ```
-
-**Supported Environments:**
-- `sandbox` - Local development (chains 20-24, chain IDs 1789-1793)
-- `testnet` - Production testing (chains 20-24, chain IDs 5920-5924)
-
 ## 🔥 Deployment & Development
 
 ### Deploy Smart Contracts
