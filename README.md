@@ -16,7 +16,8 @@ A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM networks
 - Contract quality scripts (`check:contracts`, `tidy:contracts`)
 
 **Multi-Environment Support:**
-- **[Sandbox](https://github.com/kadena-io/kadena-evm-sandbox) (Local):** `http://localhost:1848` - For local development
+- **Hardhat**
+- **[Sandbox](https://github.com/kadena-io/kadena-evm-sandbox) (Local):** `http://localhost:1848` - For local development with testnet constraints
 - **Testnet:** `https://evm-testnet.chainweb.com` - For production testing
 
 ## 🚀 Quick Start
@@ -44,42 +45,30 @@ yarn install
 
 ### Deploy Smart Contracts
 
-**Deploy to default environment (testnet):**
+**Deploy to default environment (local):**
 ```bash
 cd packages/hardhat
-yarn hardhat deploy
+yarn deploy
 ```
 
 **Deploy to specific environment:**
 ```bash
-# Deploy to sandbox (local)
-yarn hardhat deploy --chainweb sandbox
-
-# Deploy to devnet (hosted)
-yarn hardhat deploy --chainweb devnet
-
-# Deploy to testnet
-yarn hardhat deploy --chainweb testnet
+# Deploy to testnet main
+yarn deploy --network testnet20
 ```
 
 **Deploy to specific chain:**
 ```bash
-# Deploy to sandbox chain 20
-yarn hardhat deploy --chainweb sandbox --network sandbox20
-
 # Deploy to testnet chain 22
-yarn hardhat deploy --chainweb testnet --network testnet22
+yarn deploy --chainweb testnet --network testnet21
 ```
 
 ### Verify Contracts on Blockscout
 
 **Automatic verification** (works with any environment):
 ```bash
-# Verify on current environment
-yarn hardhat verify --network testnet20 <contract-address>
-
-# Verify on different environment
-yarn hardhat verify --chainweb devnet --network devnet21 <contract-address>
+# Verify on testnet
+yarn hardhat verify --network testnet21 <CONTRACT_ADDRESS> "<DEPLOYER_ADDRESS>"
 ```
 
 ### Start the Frontend

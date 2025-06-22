@@ -22,7 +22,6 @@
     "compile": "yarn hardhat:compile",
     "deploy": "yarn hardhat:deploy",
     "deploy:sandbox": "yarn hardhat:deploy --chainweb sandbox",
-    "deploy:devnet": "yarn hardhat:deploy --chainweb devnet",
     "deploy:testnet": "yarn hardhat:deploy --chainweb testnet",
     "fork": "yarn hardhat:fork",
     "format": "yarn next:format && yarn hardhat:format",

@@ -1,62 +1,87 @@
 import "@nomicfoundation/hardhat-toolbox";
 import "@kadena/hardhat-chainweb";
 import "@kadena/hardhat-kadena-create2";
+import "hardhat-deploy";
+import "hardhat-deploy-ethers";
 import "dotenv/config";
-import { readFileSync } from "fs";
 import { HardhatUserConfig } from "hardhat/config";
 
-const devnetAccounts = JSON.parse(readFileSync("./devnet-accounts.json", "utf-8"));
+const deployerKey = process.env.__RUNTIME_DEPLOYER_PRIVATE_KEY || process.env.DEPLOYER_PRIVATE_KEY;
+const accounts = deployerKey ? [deployerKey] : [];
 
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.28",
     settings: {
-      optimizer: {
-        enabled: true,
-        runs: 1000,
-      },
+      optimizer: { enabled: true, runs: 1000 },
       evmVersion: "prague",
     },
   },
 
-  // default environment is Kadena EVM testnet (can be overridden in here, or with --chainweb flag)
+  defaultNetwork: "hardhat",
   defaultChainweb: "testnet",
 
-  chainweb: {
-    hardhat: {
-      chains: 5,
+  networks: {
+    hardhat: { chainId: 31337 },
+
+    // Testnet networks
+    testnet20: {
+      chainId: 5920,
+      url: "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/20/evm/rpc",
+      accounts,
     },
+    testnet21: {
+      chainId: 5921,
+      url: "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/21/evm/rpc",
+      accounts,
+    },
+    testnet22: {
+      chainId: 5922,
+      url: "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/22/evm/rpc",
+      accounts,
+    },
+    testnet23: {
+      chainId: 5923,
+      url: "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/23/evm/rpc",
+      accounts,
+    },
+    testnet24: {
+      chainId: 5924,
+      url: "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/24/evm/rpc",
+      accounts,
+    },
+
+    // Sandbox networks
+    sandbox20: { chainId: 1789, url: "http://localhost:1848/chainweb/0.0/evm-development/chain/20/evm/rpc", accounts },
+    sandbox21: { chainId: 1790, url: "http://localhost:1848/chainweb/0.0/evm-development/chain/21/evm/rpc", accounts },
+    sandbox22: { chainId: 1791, url: "http://localhost:1848/chainweb/0.0/evm-development/chain/22/evm/rpc", accounts },
+    sandbox23: { chainId: 1792, url: "http://localhost:1848/chainweb/0.0/evm-development/chain/23/evm/rpc", accounts },
+    sandbox24: { chainId: 1793, url: "http://localhost:1848/chainweb/0.0/evm-development/chain/24/evm/rpc", accounts },
+  },
+
+  namedAccounts: {
+    deployer: { default: 0 },
+  },
+
+  chainweb: {
+    hardhat: { chains: 5 },
     sandbox: {
       type: "external",
       chains: 5,
-      accounts: devnetAccounts.accounts.map((account: { privateKey: string }) => account.privateKey),
+      accounts,
       chainIdOffset: 1789,
       chainwebChainIdOffset: 20,
       externalHostUrl: "http://localhost:1848/chainweb/0.0/evm-development",
-      // config for sandbox when running locally
-      etherscan: {
-        apiKey: "abc", // Any non-empty string works for Blockscout
-        apiURLTemplate: "http://chain-{cid}.evm.kadena.local:8000/api/",
-        browserURLTemplate: "http://chain-{cid}.evm.kadena.local:8000/",
-      },
-    },
-    devnet: {
-      type: "external",
-      chains: 5,
-      accounts: devnetAccounts.accounts.map((account: { privateKey: string }) => account.privateKey),
-      chainIdOffset: 1789,
-      chainwebChainIdOffset: 20,
-      externalHostUrl: "https://evm-devnet.kadena.network/chainweb/0.0/evm-development",
       etherscan: {
         apiKey: "abc",
-        apiURLTemplate: "http://chain-{cid}.evm.kadena.network:8000/api/",
-        browserURLTemplate: "http://chain-{cid}.evm.kadena.network:8000",
+        apiURLTemplate: "http://chain-{cid}.evm.kadena.local:8000/api/",
+        browserURLTemplate: "http://chain-{cid}.evm.kadena.local:8000/",
       },
     },
     testnet: {
       type: "external",
       chains: 5,
-      accounts: [process.env.DEPLOYER_PRIVATE_KEY, process.env.FAUCET_PRIVATE_KEY],
+      accounts,
       chainIdOffset: 5920,
       chainwebChainIdOffset: 20,
       externalHostUrl: "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet",
