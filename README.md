@@ -177,10 +177,15 @@ scaffold-kadena/
 │       └── next.config.js            # Next.js configuration
 ```
 
+## 📙 Docs
+
+This repository is forked from Scaffold-ETH 2. In depth usage instructions can be found here:
+
+ - [Scaffold-ETH 2 Documentation](https://docs.scaffoldeth.io/)
+
 ## 📚 Additional Resources
 
 - [Kadena Documentation](https://docs.kadena.io/)
-- [Scaffold-ETH 2 Documentation](https://docs.scaffoldeth.io/)
 - [Hardhat Kadena Plugin](https://github.com/kadena-io/hardhat-kadena-plugin)
 
 ## 🙏 Acknowledgments
