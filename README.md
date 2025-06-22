@@ -16,8 +16,7 @@ A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM networks
 - Contract quality scripts (`check:contracts`, `tidy:contracts`)
 
 **Multi-Environment Support:**
-- **Sandbox (Local):** `http://localhost:1848` - For local development
-- **Devnet (Hosted):** `https://evm-devnet.kadena.network` - For staging/testing (soon to be removed)
+- **[Sandbox](https://github.com/kadena-io/kadena-evm-sandbox) (Local):** `http://localhost:1848` - For local development
 - **Testnet:** `https://evm-testnet.chainweb.com` - For production testing
 
 ## 🚀 Quick Start
@@ -44,7 +43,6 @@ yarn install
 
 **Supported Environments:**
 - `sandbox` - Local development (chains 20-24, chain IDs 1789-1793)
-- `devnet` - Hosted development (chains 20-24, chain IDs 1789-1793) 
 - `testnet` - Production testing (chains 20-24, chain IDs 5920-5924)
 
 ## 🔥 Deployment & Development
@@ -109,13 +107,6 @@ The project supports **5 chains per environment**. Add any or all of them to Met
 - **Chain 23**: Chain ID `5923`, RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/23/evm/rpc`
 - **Chain 24**: Chain ID `5924`, RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/24/evm/rpc`
 
-### Devnet (Hosted Development)
-- **Chain 20**: Chain ID `1789`, RPC: `https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/20/evm/rpc`
-- **Chain 21**: Chain ID `1790`, RPC: `https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/21/evm/rpc`
-- **Chain 22**: Chain ID `1791`, RPC: `https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/22/evm/rpc`
-- **Chain 23**: Chain ID `1792`, RPC: `https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/23/evm/rpc`
-- **Chain 24**: Chain ID `1793`, RPC: `https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/24/evm/rpc`
-
 ### Sandbox (Local Development)
 - **Chain 20**: Chain ID `1789`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/20/evm/rpc`
 - **Chain 21**: Chain ID `1790`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/21/evm/rpc`
@@ -131,8 +122,7 @@ The project supports **5 chains per environment**. Add any or all of them to Met
 
 Each environment has its own Blockscout instance for contract verification and exploration:
 
-- **Testnet**: `http://chain-{cid}.evm-testnet-blockscout.chainweb.com` (e.g., chain-20.evm-testnet-blockscout.chainweb.com)
-- **Devnet**: `http://chain-{cid}.evm.kadena.network:8000` 
+- **Testnet**: `http://chain-20.evm-testnet-blockscout.chainweb.com/` (chain 20, replace with 20-24)
 - **Sandbox**: `http://chain-{cid}.evm.kadena.local:8000`
 
 ## 🚢 Using Your dApp
@@ -203,14 +193,12 @@ scaffold-kadena/
 ## 📚 Additional Resources
 
 - [Kadena Documentation](https://docs.kadena.io/)
-- [Kadena EVM Documentation](https://docs.kadena.io/build/frontend/kadena-client)
 - [Scaffold-ETH 2 Documentation](https://docs.scaffoldeth.io/)
 - [Hardhat Kadena Plugin](https://github.com/kadena-io/hardhat-kadena-plugin)
 
 ## 🙏 Acknowledgments
 
 - BuidlGuidl and the Scaffold-ETH team for the original framework
-- Kadena team for the EVM integration and tooling
 
 ## 📄 License
 
