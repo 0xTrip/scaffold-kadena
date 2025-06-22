@@ -48,7 +48,7 @@ cp .env.example .env
 
 **Create new contracts** in `packages/hardhat/contracts/`:
 
-```solidity
+```javascript
 // packages/hardhat/contracts/MyKadenaContract.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
@@ -62,6 +62,7 @@ contract MyKadenaContract {
     
     // Extremely based contract logic goes here...
 }
+```
 
 ### Deploy Smart Contracts
 
