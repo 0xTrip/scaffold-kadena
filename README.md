@@ -49,7 +49,7 @@ cp .env.example .env
 **Create new contracts** in `packages/hardhat/contracts/`:
 
 ```solidity
-// packages/hardhat/contracts/MyAwesomeContract.sol
+// packages/hardhat/contracts/MyKadenaContract.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
