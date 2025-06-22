@@ -34,7 +34,34 @@ cd scaffold-kadena
 ```bash
 yarn install
 ```
+
+### 3. Set up environment variables (if using an encrypted private key, follow the instructions in .env.example)
+
+```bash
+cd packages/hardhat
+cp .env.example .env
+```
+
 ## 🔥 Deployment & Development
+
+### Writing Smart Contracts
+
+**Create new contracts** in `packages/hardhat/contracts/`:
+
+```solidity
+// packages/hardhat/contracts/MyAwesomeContract.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+contract MyKadenaContract {
+    address public owner;
+    
+    constructor(address _owner) {
+        owner = _owner;
+    }
+    
+    // Extremely based contract logic goes here...
+}
 
 ### Deploy Smart Contracts
 
