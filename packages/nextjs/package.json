@@ -2,6 +2,7 @@
   "name": "@se-2/nextjs",
   "private": true,
   "version": "0.1.0",
+  "license": "MIT",
   "scripts": {
     "build": "next build",
     "check-types": "tsc --noEmit --incremental",
