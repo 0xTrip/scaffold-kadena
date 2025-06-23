@@ -83,7 +83,7 @@ yarn deploy --network testnet20
 yarn deploy --network testnet21
 ```
 
-### Verify Contracts on Blockscout
+### Verify Contracts on Blockscout (If needed)
 
 **Contract verification** (works with any environment):
 ```bash
@@ -92,6 +92,9 @@ yarn hardhat verify --network testnet20 <CONTRACT_ADDRESS> "<DEPLOYER_ADDRESS>"
 ```
 
 ### Start the Frontend
+
+Network is set to testnet as default, to use sandbox, edit your .env.local file in `packages/nextjs/.env.local`. You can uncomment this line:
+`NEXT_PUBLIC_USE_SANDBOX=true`
 
 ```bash
 cd ../nextjs
@@ -188,6 +191,15 @@ This repository is forked from Scaffold-ETH 2. In depth usage instructions can b
 - [Kadena Documentation](https://docs.kadena.io/)
 - [Hardhat Kadena Plugin](https://github.com/kadena-io/hardhat-kadena-plugin)
 
+## Troubleshooting Known Issues
+
+If you see SWC dependency warnings when starting the frontend:
+
+```bash
+# Stop the dev server and again run:
+yarn install
+yarn start
+```
 ## 🙏 Acknowledgments
 
 - BuidlGuidl and the Scaffold-ETH team for the original framework

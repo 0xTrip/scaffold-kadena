@@ -74,7 +74,6 @@
   ],
   "author": "Your Name",
   "license": "MIT",
-  "packageManager": "yarn@3.2.3",
   "devDependencies": {
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",

@@ -1,80 +1,76 @@
 import { defineChain } from "viem";
 
-// Define Kadena Devnet Chain 0
-export const kadenaDevnet0 = defineChain({
-  id: 1789,
-  name: "Kadena Devnet Chain 0",
-  network: "kadenaDevnet0",
-  nativeCurrency: {
-    name: "Kadena",
-    symbol: "KDA",
-    decimals: 18,
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/0/evm/rpc"],
-    },
-    public: {
-      http: ["https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/0/evm/rpc"],
-    },
-  },
-});
-
-// Define Kadena Devnet Chain 1
-export const kadenaDevnet1 = defineChain({
-  id: 1790,
-  name: "Kadena Devnet Chain 1",
-  network: "kadenaDevnet1",
-  nativeCurrency: {
-    name: "Kadena",
-    symbol: "KDA",
-    decimals: 18,
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/1/evm/rpc"],
-    },
-    public: {
-      http: ["https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/1/evm/rpc"],
-    },
-  },
-});
-
-// Add back the DEFAULT_ALCHEMY_API_KEY
+// Add back the DEFAULT_ALCHEMY_API_KEY for compatibility
 export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
+
+// Helper function to create Kadena chains
+const createKadenaChain = (chainNum: number, environment: "sandbox" | "testnet") => {
+  const isTestnet = environment === "testnet";
+  const chainId = isTestnet ? 5920 + (chainNum - 20) : 1789 + (chainNum - 20);
+  const rpcUrl = isTestnet 
+    ? `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/${chainNum}/evm/rpc`
+    : `http://localhost:1848/chainweb/0.0/evm-development/chain/${chainNum}/evm/rpc`;
+
+  return defineChain({
+    id: chainId,
+    name: `Kadena ${environment === "testnet" ? "Testnet" : "Sandbox"} Chain ${chainNum}`,
+    network: `${environment}${chainNum}`,  // ← Fixed: matches hardhat network names
+    nativeCurrency: {
+      name: "Kadena",
+      symbol: "KDA", 
+      decimals: 18,
+    },
+    rpcUrls: {
+      default: { http: [rpcUrl] },
+      public: { http: [rpcUrl] },
+    },
+    blockExplorers: isTestnet ? {
+      default: {
+        name: "Blockscout",
+        url: `http://chain-${chainNum}.evm-testnet-blockscout.chainweb.com`,
+      },
+    } : undefined,
+  });
+};
+
+// Create chains 20-24 for both environments
+export const kadenaTestnet20 = createKadenaChain(20, "testnet");
+export const kadenaTestnet21 = createKadenaChain(21, "testnet"); 
+export const kadenaTestnet22 = createKadenaChain(22, "testnet");
+export const kadenaTestnet23 = createKadenaChain(23, "testnet");
+export const kadenaTestnet24 = createKadenaChain(24, "testnet");
+
+export const kadenaSandbox20 = createKadenaChain(20, "sandbox");
+export const kadenaSandbox21 = createKadenaChain(21, "sandbox");
+export const kadenaSandbox22 = createKadenaChain(22, "sandbox");
+export const kadenaSandbox23 = createKadenaChain(23, "sandbox");
+export const kadenaSandbox24 = createKadenaChain(24, "sandbox");
 
 export type ScaffoldConfig = {
   targetNetworks: readonly any[];
   pollingInterval: number;
-  alchemyApiKey: string; // Add this back
-  rpcOverrides?: Record<number, string>;
+  alchemyApiKey: string;
   walletConnectProjectId: string;
   onlyLocalBurnerWallet: boolean;
 };
 
 const scaffoldConfig = {
-  // Only target Kadena devnet chains
-  targetNetworks: [kadenaDevnet0, kadenaDevnet1],
+  // Target networks - defaults to testnet, use NEXT_PUBLIC_USE_SANDBOX=true for sandbox
+  targetNetworks: process.env.NEXT_PUBLIC_USE_SANDBOX === "true"
+    ? [kadenaSandbox20, kadenaSandbox21, kadenaSandbox22, kadenaSandbox23, kadenaSandbox24]
+    : [kadenaTestnet20, kadenaTestnet21, kadenaTestnet22, kadenaTestnet23, kadenaTestnet24],
 
-  // Using a shorter polling interval for devnet
+  // Polling interval
   pollingInterval: 5000,
 
-  // Add back alchemyApiKey
+  // Alchemy API key (for compatibility, not used with Kadena)
   alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || DEFAULT_ALCHEMY_API_KEY,
 
-  // RPC overrides if needed
-  rpcOverrides: {
-    1789:
-      process.env.RPC_URL_CHAIN0 || "https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/0/evm/rpc",
-    1790:
-      process.env.RPC_URL_CHAIN1 || "https://evm-devnet.kadena.network/chainweb/0.0/evm-development/chain/1/evm/rpc",
-  },
-
-  // WalletConnect project ID (keep for wallet connections)
+  // WalletConnect project ID
   walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "3a8170812b534d0ff9d794f19a901d64",
 
-  // Disable local burner wallet
-  onlyLocalBurnerWallet: false,
+  // Use local burner wallet only in sandbox mode
+  onlyLocalBurnerWallet: process.env.NEXT_PUBLIC_USE_SANDBOX === "true",
 } as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;
