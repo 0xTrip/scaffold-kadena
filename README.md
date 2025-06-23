@@ -18,7 +18,7 @@ A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM networks
 ### Prerequisites
 
 - [Node (>= v20.18.3)](https://nodejs.org/en/)
-- [Yarn (v1 or v2+)](https://yarnpkg.com/)
+- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
 - [MetaMask](https://metamask.io/) browser extension
 
