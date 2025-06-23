@@ -1,6 +1,6 @@
 import { defineChain } from "viem";
 
-// Add back the DEFAULT_ALCHEMY_API_KEY for compatibility
+// DEFAULT_ALCHEMY_API_KEY is incluided here for compatibility - although this is not needed
 export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 
 // Helper function to create Kadena chains
@@ -14,7 +14,7 @@ const createKadenaChain = (chainNum: number, environment: "sandbox" | "testnet")
   return defineChain({
     id: chainId,
     name: `Kadena ${environment === "testnet" ? "Testnet" : "Sandbox"} Chain ${chainNum}`,
-    network: `${environment}${chainNum}`,  // ← Fixed: matches hardhat network names
+    network: `${environment}${chainNum}`, 
     nativeCurrency: {
       name: "Kadena",
       symbol: "KDA", 
@@ -55,7 +55,7 @@ export type ScaffoldConfig = {
 };
 
 const scaffoldConfig = {
-  // Target networks - defaults to testnet, use NEXT_PUBLIC_USE_SANDBOX=true for sandbox
+  // Target networks - defaults to testnet, use NEXT_PUBLIC_USE_SANDBOX=true in .env.local for sandbox
   targetNetworks: process.env.NEXT_PUBLIC_USE_SANDBOX === "true"
     ? [kadenaSandbox20, kadenaSandbox21, kadenaSandbox22, kadenaSandbox23, kadenaSandbox24]
     : [kadenaTestnet20, kadenaTestnet21, kadenaTestnet22, kadenaTestnet23, kadenaTestnet24],
