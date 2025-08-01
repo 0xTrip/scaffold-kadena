@@ -10,7 +10,7 @@
     "check-types": "tsc --noEmit --incremental",
     "clean": "hardhat clean",
     "compile": "hardhat compile",
-    "deploy": "ts-node scripts/runHardhatDeployWithPK.ts",
+    "deploy": "hardhat run scripts/runHardhatDeployWithPK.ts",
     "flatten": "hardhat flatten",
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
     "format": "prettier --write './**/*.(ts|sol)'",
@@ -19,9 +19,7 @@
     "lint": "eslint",
     "lint-staged": "eslint",
     "test": "REPORT_GAS=true hardhat test --network hardhat",
-    "verify": "hardhat etherscan-verify",
-    "deploy:kadena0": "node scripts/deploy-kadena.js 0",
-    "deploy:kadena1": "node scripts/deploy-kadena.js 1"
+    "verify": "hardhat etherscan-verify"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
