@@ -18,7 +18,7 @@ async function generateDeployedContractsFile(deployed: any, networkChainId: stri
   const artifact = await hre.artifacts.readArtifact(contractName);
 
   const deployedContracts = {
-    [networkChainId]: {
+    [parseInt(networkChainId.toString())]: {
       YourContract: {
         address: deployed.deployments[0].address,
         abi: artifact.abi, // Use the ABI from compilation artifacts
