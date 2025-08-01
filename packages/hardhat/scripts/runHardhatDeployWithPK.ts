@@ -3,6 +3,7 @@ dotenv.config();
 import { Wallet } from "ethers";
 import password from "@inquirer/password";
 import { chainweb } from "hardhat";
+import type { DeployedContractsOnChains } from "hardhat-kadena/src/utils";
 import hre from "hardhat";
 import fs from "fs";
 import path from "path";
@@ -10,21 +11,40 @@ import path from "path";
 /**
  * Generate deployedContracts.ts file for frontend
  */
-async function generateDeployedContractsFile(deployed: any, networkChainId: string | number) {
-  console.log("deployed in generateDeployedContractsFile", deployed);
+async function generateDeployedContractsFile(deployments: any[]) {
+  const contractName: string = "YourContract";
+  const deploymentsByChain: Record<number, DeployedContractsOnChains> = {};
+  const deployedContracts: Record<string, any> = {};
 
-  // Try to get the ABI from compilation artifacts
-  const contractName = "YourContract";
+  // Get et the ABI from compilation artifacts
   const artifact = await hre.artifacts.readArtifact(contractName);
+  console.log("deployments in generateDeployedContractsFile", deployments);
 
-  const deployedContracts = {
-    [parseInt(networkChainId.toString())]: {
+  // Create a map of deployments by chain ID for easy lookup
+
+  for (const deployment of deployments) {
+    deploymentsByChain[deployment.chain] = deployment;
+  }
+
+  // Process deployments using runOverChains for consistency
+  await chainweb.runOverChains(async chainId => {
+    // No need for explicit chainweb chain switching, runOverChains does that for us
+    console.log("network.config.chainId", network.config.chainId);
+
+    // Skip chains that weren't in our successful deployments
+    if (!deploymentsByChain[chainId]) {
+      console.log(`No deployment for chain ${chainId}, skipping verification`);
+      return;
+    }
+
+    const deployment = deploymentsByChain[chainId];
+    deployedContracts[network.config.chainId] = {
       YourContract: {
-        address: deployed.deployments[0].address,
+        address: deployment.address,
         abi: artifact.abi, // Use the ABI from compilation artifacts
       },
-    },
-  };
+    };
+  });
 
   const contractsDir = path.join(__dirname, "../../nextjs/contracts");
   const filePath = path.join(contractsDir, "deployedContracts.ts");
@@ -48,7 +68,8 @@ export default deployedContracts satisfies GenericContractsDeclaration;
  * Unencrypts the private key and runs the hardhat deploy command
  */
 async function main() {
-  let deployed;
+  let deployed: { deployments: DeployedContractsOnChains[] };
+  let successfulDeployments: DeployedContractsOnChains[];
 
   // Make sure we're on the first chainweb chain
   const chains = await chainweb.getChainIds();
@@ -73,12 +94,18 @@ async function main() {
       process.exit(0);
       return;
     }
-    console.log("Contracts deployed");
-    console.log("network.config.chainId", network.config.chainId);
 
-    // Generate file for local deployment
-    await generateDeployedContractsFile(deployed, network.config.chainId);
-    process.exit(0);
+    // Filter out failed deployments
+    successfulDeployments = deployed.deployments.filter(d => d !== null);
+    console.log("Successful deployments:", successfulDeployments);
+
+    if (successfulDeployments.length > 0) {
+      console.log(`Contract successfully deployed to ${successfulDeployments.length} chains`);
+
+      // Generate file for local deployments
+      await generateDeployedContractsFile(successfulDeployments);
+      process.exit(0);
+    }
   }
 
   const encryptedKey = process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED;
@@ -116,8 +143,17 @@ async function main() {
 
   console.log("network.config.chainId", network.config.chainId);
 
-  // Generate file for local deployment
-  await generateDeployedContractsFile(deployed, network.config.chainId);
+  // Filter out failed deployments
+  successfulDeployments = deployed.deployments.filter(d => d !== null);
+  console.log("Successful deployments:", successfulDeployments);
+
+  if (successfulDeployments.length > 0) {
+    console.log(`Contract successfully deployed to ${successfulDeployments.length} chains`);
+
+    // Generate file for local deployments
+    await generateDeployedContractsFile(successfulDeployments);
+    process.exit(0);
+  }
 }
 
 main().catch(console.error);
