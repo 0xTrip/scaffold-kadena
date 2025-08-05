@@ -14,15 +14,24 @@ async function main() {
   const [deployer] = await ethers.getSigners();
   console.log("Remote deployer:", deployer.address);
 
-  const deployed = await chainweb.deployContractOnChains({
+  const [factoryAddress] = await chainweb.create2.deployCreate2Factory();
+  console.log(`Create2 factory deployed at: ${factoryAddress}`);
+
+  // This creates a bytes32 hash of the string. Change as needed to redeploy same contract code to different address.
+  const salt = ethers.id("mySalt");
+
+  // Deploy the contract using standard Create2 factory functionality to ensure the same address across all chains
+  console.log("Deploying contract using Create2...");
+  const deployed = await chainweb.create2.deployOnChainsUsingCreate2({
     name: "YourContract",
     constructorArgs: [deployer.address],
+    create2Factory: factoryAddress,
+    salt: salt,
   });
 
-  if (deployed.deployments.length === 0) {
-    console.log("No contracts deployed");
-    return;
-  }
+  deployed.deployments.forEach(async deployment => {
+    console.log(`${deployment.address} on ${deployment.chain}`);
+  });
 
   const successfulDeployments = deployed.deployments.filter(d => d !== null);
   console.log("Successful deployments:", successfulDeployments);
