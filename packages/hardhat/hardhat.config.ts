@@ -18,23 +18,19 @@ const config: HardhatUserConfig = {
     },
   },
 
-  namedAccounts: {
-    deployer: { default: 0 },
-  },
-
   chainweb: {
     hardhat: { chains: 5 },
     testnet: {
       type: "external",
       chains: 5,
-      accounts: [accounts],
+      accounts: accounts,
       chainIdOffset: 5920,
       chainwebChainIdOffset: 20,
       externalHostUrl: "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet",
       etherscan: {
-        apiKey: "abc",
-        apiURLTemplate: "http://chain-{cid}.evm-testnet-blockscout.chainweb.com/api/",
-        browserURLTemplate: "http://chain-{cid}.evm-testnet-blockscout.chainweb.com",
+        apiKey: "abc", // Any non-empty string works for Blockscout
+        apiURLTemplate: "https://chain-{cid}.evm-testnet-blockscout.chainweb.com/api/",
+        browserURLTemplate: "https://chain-{cid}.evm-testnet-blockscout.chainweb.com",
       },
     },
   },

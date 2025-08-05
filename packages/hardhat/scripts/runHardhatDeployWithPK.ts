@@ -1,12 +1,13 @@
-import * as dotenv from "dotenv";
-dotenv.config();
+import { spawn } from "child_process";
+import { chainweb, network, ethers, artifacts } from "hardhat";
 import { Wallet } from "ethers";
 import password from "@inquirer/password";
-import { chainweb } from "hardhat";
+import type { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 import type { DeployedContractsOnChains } from "hardhat-kadena/src/utils";
-import hre from "hardhat";
 import fs from "fs";
 import path from "path";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 /**
  * Generate deployedContracts.ts file for frontend
@@ -17,7 +18,7 @@ async function generateDeployedContractsFile(deployments: any[]) {
   const deployedContracts: Record<string, any> = {};
 
   // Get et the ABI from compilation artifacts
-  const artifact = await hre.artifacts.readArtifact(contractName);
+  const artifact = await artifacts.readArtifact(contractName);
   console.log("deployments in generateDeployedContractsFile", deployments);
 
   // Create a map of deployments by chain ID for easy lookup
@@ -65,26 +66,29 @@ export default deployedContracts satisfies GenericContractsDeclaration;
 }
 
 /**
- * Unencrypts the private key and runs the hardhat deploy command
+ * Deploys using the Hardhat Kadena plugin direcftly for local. It decrypts the encrypted PK (if used)
+ * and spawns a new process for remote deployment
  */
 async function main() {
   let deployed: { deployments: DeployedContractsOnChains[] };
   let successfulDeployments: DeployedContractsOnChains[];
+  let deployer: SignerWithAddress;
+  let decryptedPrivateKey: string;
 
   // Make sure we're on the first chainweb chain
   const chains = await chainweb.getChainIds();
   console.log("chains,", chains);
   await chainweb.switchChain(chains[0]);
-  const [deployer] = await ethers.getSigners();
-  console.log("deployer", deployer);
-
-  console.log(`Deploying contracts with deployer account: ${deployer.address} on network: ${network.name}`);
 
   const isLocalNetwork = network.name.includes("hardhat") || network.name.includes("localhost");
 
-  console.log("isLocalNetwork", isLocalNetwork);
-
   if (isLocalNetwork) {
+    // LOCAL: Simple deployment with built-in Hardhat accounts
+    [deployer] = await ethers.getSigners();
+    console.log("deployer", deployer);
+
+    console.log(`Deploying contracts with deployer account: ${deployer.address} on network: ${network.name}`);
+
     deployed = await chainweb.deployContractOnChains({
       name: "YourContract",
       constructorArgs: [deployer.address],
@@ -108,52 +112,61 @@ async function main() {
     }
   }
 
+  // REMOTE: Use spawn pattern for encrypted keys
   const encryptedKey = process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED;
+  const plainKey = process.env.DEPLOYER_PRIVATE_KEY;
 
-  if (!encryptedKey) {
-    console.log("🚫️ You don't have a deployer account. Run `yarn generate` or `yarn account:import` first");
+  if (encryptedKey) {
+    console.log("Using encrypted private key...");
+    const pass = await password({ message: "Enter password to decrypt private key:" });
+
+    try {
+      const wallet = await Wallet.fromEncryptedJson(encryptedKey, pass);
+      decryptedPrivateKey = wallet.privateKey;
+    } catch (e) {
+      console.error("Failed to decrypt private key. Wrong password?", e);
+      process.exit(1);
+    }
+  } else if (plainKey) {
+    console.log("Using plain private key from .env...");
+    decryptedPrivateKey = plainKey;
+  } else {
+    console.log("🚫️ No private key found. Set DEPLOYER_PRIVATE_KEY or DEPLOYER_PRIVATE_KEY_ENCRYPTED");
     return;
   }
 
-  console.log("Asking for password to decrypt private key...");
-  const pass = await password({ message: "Enter password to decrypt private key:" });
+  // Spawn a new hardhat process with the decrypted key
+  console.log("Spawning hardhat process for remote deployment...");
 
-  try {
-    const wallet = await Wallet.fromEncryptedJson(encryptedKey, pass);
-    const signer = wallet.connect(hre.ethers.provider);
+  const env = {
+    ...process.env,
+    __RUNTIME_DEPLOYER_PRIVATE_KEY: decryptedPrivateKey,
+  };
 
-    deployed = await chainweb.deployContractOnChains({
-      name: "YourContract",
-      signer: signer, // Use the signer associated with the decrypted private key
-      constructorArgs: [deployer.address],
-    });
+  const chainwebNetwork = network.name.includes("testnet")
+    ? "testnet"
+    : network.name.includes("mainnet")
+      ? "mainnet"
+      : "testnet";
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (e) {
-    console.error("Failed to decrypt private key. Wrong password?");
-    process.exit(1);
-  }
+  console.log("Using chainweb network:", chainwebNetwork);
 
-  if (deployed.deployments.length === 0) {
-    console.log("No contracts deployed");
-    return;
-  }
-  // ...existing code...
-  console.log("Contracts deployed");
+  const chainwebArgs = ["--chainweb", chainwebNetwork];
 
-  console.log("network.config.chainId", network.config.chainId);
+  const spawnedProcess = spawn("npx", ["hardhat", "run", "scripts/deployToRemoteChains.ts", ...chainwebArgs], {
+    stdio: "inherit",
+    env: env,
+    cwd: process.cwd(),
+  });
 
-  // Filter out failed deployments
-  successfulDeployments = deployed.deployments.filter(d => d !== null);
-  console.log("Successful deployments:", successfulDeployments);
-
-  if (successfulDeployments.length > 0) {
-    console.log(`Contract successfully deployed to ${successfulDeployments.length} chains`);
-
-    // Generate file for local deployments
-    await generateDeployedContractsFile(successfulDeployments);
-    process.exit(0);
-  }
+  spawnedProcess.on("close", code => {
+    if (code === 0) {
+      console.log("✅ Remote deployment completed successfully");
+    } else {
+      console.error(`❌ Remote deployment failed with exit code ${code}`);
+      process.exit(code || 1);
+    }
+  });
 }
 
 main().catch(console.error);
