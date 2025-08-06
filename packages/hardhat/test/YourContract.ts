@@ -15,7 +15,7 @@ describe("YourContract", function () {
 
   describe("Deployment", function () {
     it("Should have the right message on deploy", async function () {
-      expect(await yourContract.greeting()).to.equal("Building Unstoppable Apps!!!");
+      expect(await yourContract.greeting()).to.equal("Build on Kadena!!!");
     });
 
     it("Should allow setting a new message", async function () {
