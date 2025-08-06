@@ -1,6 +1,6 @@
 {
   "name": "scaffold-kadena",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "repository": "https://github.com/0xTrip/scaffold-kadena",
   "description": "A developer toolkit for building and deploying dApps on Kadena EVM",
   "main": "index.js",
