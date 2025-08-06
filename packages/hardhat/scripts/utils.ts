@@ -13,7 +13,6 @@ export async function generateDeployedContractsFile(deployments: any[]) {
 
   // Get the ABI from compilation artifacts
   const artifact = await hre.artifacts.readArtifact(contractName);
-  console.log("deployments in generateDeployedContractsFile", deployments);
 
   // Create a map of deployments by chain ID for easy lookup
   for (const deployment of deployments) {
@@ -23,7 +22,7 @@ export async function generateDeployedContractsFile(deployments: any[]) {
   // Process deployments using runOverChains for consistency
   await hre.chainweb.runOverChains(async (chainId: number) => {
     // No need for explicit chainweb chain switching, runOverChains does that for us
-    console.log("hre.network.config.chainId", hre.network.config.chainId);
+    console.log(`Generating deployed contract data for chain ${chainId}`);
 
     // Skip chains that weren't in our successful deployments
     if (!deploymentsByChain[chainId]) {

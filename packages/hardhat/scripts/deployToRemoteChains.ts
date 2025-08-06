@@ -12,7 +12,6 @@ async function main() {
 
   // Now the signer will be available because __RUNTIME_DEPLOYER_PRIVATE_KEY was set!
   const [deployer] = await ethers.getSigners();
-  console.log("Remote deployer:", deployer.address);
 
   const [factoryAddress] = await chainweb.create2.deployCreate2Factory();
   console.log(`Create2 factory deployed at: ${factoryAddress}`);
@@ -34,7 +33,6 @@ async function main() {
   });
 
   const successfulDeployments = deployed.deployments.filter(d => d !== null);
-  console.log("Successful deployments:", successfulDeployments);
 
   if (successfulDeployments.length > 0) {
     console.log(`Contract successfully deployed to ${successfulDeployments.length} chains`);

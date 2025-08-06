@@ -20,7 +20,6 @@ async function main() {
 
   // Make sure we're on the first chainweb chain
   const chains = await chainweb.getChainIds();
-  console.log("chains,", chains);
   await chainweb.switchChain(chains[0]);
 
   const isLocalNetwork = network.name.includes("hardhat") || network.name.includes("localhost");
@@ -28,7 +27,6 @@ async function main() {
   if (isLocalNetwork) {
     // LOCAL: Simple deployment with built-in Hardhat accounts
     [deployer] = await ethers.getSigners();
-    console.log("deployer", deployer);
 
     console.log(`Deploying contracts with deployer account: ${deployer.address} on network: ${network.name}`);
 
@@ -44,7 +42,6 @@ async function main() {
 
     // Filter out failed deployments
     successfulDeployments = deployed.deployments.filter(d => d !== null);
-    console.log("Successful deployments:", successfulDeployments);
 
     if (successfulDeployments.length > 0) {
       console.log(`Contract successfully deployed to ${successfulDeployments.length} chains`);
