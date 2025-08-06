@@ -19,7 +19,15 @@ const config: HardhatUserConfig = {
   },
 
   chainweb: {
-    hardhat: { chains: 5 },
+    hardhat: {
+      chains: 2,
+      networkOptions: {
+        forking: {
+          url: `https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+          enabled: process.env.MAINNET_FORKING_ENABLED === "true",
+        },
+      },
+    },
     testnet: {
       type: "external",
       chains: 5,
