@@ -3,7 +3,7 @@ import { chainweb, network, ethers } from "hardhat";
 import { Wallet } from "ethers";
 import password from "@inquirer/password";
 import type { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
-import type { DeployedContractsOnChains } from "hardhat-kadena/src/utils";
+import type { DeployedContractsOnChains } from "@kadena/hardhat-chainweb/lib/utils";
 import { generateDeployedContractsFile } from "./utils";
 import * as dotenv from "dotenv";
 dotenv.config();
