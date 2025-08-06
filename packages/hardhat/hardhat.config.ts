@@ -1,8 +1,8 @@
 import "@nomicfoundation/hardhat-toolbox";
 import "@kadena/hardhat-chainweb";
 import "@kadena/hardhat-kadena-create2";
-import "hardhat-deploy";
 import "hardhat-deploy-ethers";
+import "./tasks/verify-chainweb";
 import "dotenv/config";
 import { HardhatUserConfig } from "hardhat/config";
 

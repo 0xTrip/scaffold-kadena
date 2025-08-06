@@ -15,11 +15,10 @@
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node",
     "format": "prettier --write './**/*.(ts|sol)'",
     "generate": "yarn account:generate",
-    "hardhat-verify": "hardhat verify",
+    "verify-chainweb:testnet": "hardhat verify-chainweb --chainweb testnet",
     "lint": "eslint",
     "lint-staged": "eslint",
-    "test": "REPORT_GAS=true hardhat test --network hardhat",
-    "verify": "hardhat etherscan-verify"
+    "test": "REPORT_GAS=true hardhat test --network hardhat"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
