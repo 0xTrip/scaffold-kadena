@@ -35,77 +35,89 @@ cd scaffold-kadena
 yarn install
 ```
 
-### 3. Set up environment variables (if using an encrypted private key, follow the instructions in .env.example)
+### 4. Run a local Hardhat chain in the first terminal:
+
+```
+yarn chain
+```
+
+### 5. In a second terminal, deploy the contract to localhost:
+
+```
+yarn deploy:localhost
+```
+
+### 6. In a third terminal, start your NextJS app:
+First setup the nextjs env file:
 
 ```bash
-cd packages/hardhat
+cd packages/nextjs
 cp .env.example .env
 ```
 
-## 🔥 Deployment & Development
-
-### Writing Smart Contracts
-
-**Create new contracts** in `packages/hardhat/contracts/`:
-
-```javascript
-// packages/hardhat/contracts/MyKadenaContract.sol
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.28;
-
-contract MyKadenaContract {
-    address public owner;
-    
-    constructor(address _owner) {
-        owner = _owner;
-    }
-    
-    // Extremely based contract logic goes here...
-}
-```
-
-### Deploy Smart Contracts
-
-**Deploy to default environment (local):**
+Then run from that directory or the top level directory
 ```bash
-cd packages/hardhat
-yarn deploy
-```
-
-**Deploy to testnet:**
-```bash
-yarn deploy --network testnet20
-```
-
-**Deploy to specific testnet chain:**
-```bash
-# Deploy to testnet chain 21
-yarn deploy --network testnet21
-```
-
-### Verify Contracts on Blockscout (If needed)
-
-**Contract verification** (works with any environment):
-```bash
-# Verify on testnet 20
-yarn hardhat verify --network testnet20 <CONTRACT_ADDRESS> "<DEPLOYER_ADDRESS>"
-```
-
-### Start the Frontend
-
-Network is set to testnet as default, to use sandbox, edit your .env.local file in `packages/nextjs/.env.local`. You can uncomment this line:
-`NEXT_PUBLIC_USE_SANDBOX=true`
-
-```bash
-cd ../nextjs
 yarn start
 ```
 
 Your application will be available at: http://localhost:3000
 
-## 🦊 Connect MetaMask to Kadena Networks
+### 7:  🦊 Connect MetaMask to Kadena Hardhat localhost:
+In the fronted, click on the "Connect Wallet" button in the top right corner. Follow the prompt to add Kadena Localhost Chain 0. Repeat the same for Kadena Localhost Chain 1.
 
-The project supports **5 chains per environment**. Add any or all of them to MetaMask:
+Configure the known Hardhat account 0 and account 1 by importing the following private keys into MetaMask:
+* account 0: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+* account 1: 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
+
+## Running against Kadena Testnet Chains
+### 1. In a terminal, deploy to Kadena testnet chains using CREATE2 and verify contracts by running
+
+```
+yarn deploy:testnet
+
+```
+### 1a. By default, we have configured the .env.example file to have the default Hardhat account configured. 
+We have pre-funded this account to have KDA on all Kadena Testnet chains. The PK below corresponds to 
+`0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`
+
+`DEPLOYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`
+
+Note that if you want to deploy your contract using your own account, you should replace the `DEPLOYER_PRIVATE_KEY `value
+in `packages/hardhat/.env `with your own private key.
+
+Another option is to use an encrypted private key by either importing and encrypting your own private key:
+
+```
+yarn account:import
+
+```
+or letting the project generate an encrypted private key for you:
+```
+yarn account:generate
+
+```
+
+In both of thse scenarios, you will need to fund your account on all Kadena Testnet chains using the Kadena EVM [faucet](https://tools.kadena.io/faucet/evm)
+
+
+### 2. Modify the frontend to run against testnet
+* cd to packages/nextjs
+* Change `NEXT_PUBLIC_USE_LOCALHOST=true` to `false`
+* The frontend should automatically update to point to testnet
+
+
+### 3. 🦊 Connect MetaMask to Kadena Testnet Chains
+
+The project supports **5 chains per environment**. Add any or all of them to MetaMask.
+The Kadena Testnet Explorer has a button that you can use to easily add the chains to MetaMask.
+To do this, first go tho the block explorer for Kadena Testnet Chain [20](https://chain-20.evm-testnet-blockscout.chainweb.com/).  Scroll down to the bottom of the page, and click on the `Add testnet@chain20` button.
+
+Swtich to chain 21 using one of the drop-downs at the top of the page. Scroll to the botom and click the 
+`Add testnet@chain21` button.
+
+Repeat for chains 22 - 24.
+
+To manually configure the Kadena Testnet chains, add the chains below as custom networks in MetaMask
 
 ### Testnet (Production Testing)
 - **Chain 20**:
@@ -135,29 +147,16 @@ The project supports **5 chains per environment**. Add any or all of them to Met
   - **RPC**: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/24/evm/rpc`
   - **Block Explorer**: `http://chain-24.evm-testnet-blockscout.chainweb.com/`
 
-### [Sandbox](https://github.com/kadena-io/kadena-evm-sandbox) (Local Development)
-- **Chain 20**: Chain ID `1789`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/20/evm/rpc`
-- **Chain 21**: Chain ID `1790`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/21/evm/rpc`
-- **Chain 22**: Chain ID `1791`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/22/evm/rpc`
-- **Chain 23**: Chain ID `1792`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/23/evm/rpc`
-- **Chain 24**: Chain ID `1793`, RPC: `http://localhost:1848/chainweb/0.0/evm-development/chain/24/evm/rpc`
 
 **For all networks:**
 - **Currency Symbol**: KDA
 
 ## 🔍 Contract Verification & Block Explorers
 
-Each environment has its own Blockscout instance for contract verification, replace ```ChainId``` with target chain ID:
+Each chain has its own Blockscout instance for contract verification, replace ```ChainId``` with target chain ID:
 
 - **Testnet**: `http://chain-<ChainId>.evm-testnet-blockscout.chainweb.com/` 
-- **Sandbox**: `http://chain-<ChainId>.evm.kadena.local:8000`
 
-## 🚢 Using Your dApp
-
-1. Deploy contracts to your preferred environment using the commands above
-2. Start the frontend and connect MetaMask to the appropriate Kadena network
-3. **For testnet**, you'll need your own funded accounts (see Environment Variables section and [Faucet](https://tools.kadena.io/faucet/new))
-4. Interact with your contracts through the UI
 
 ## 🔍 Project Structure
 
@@ -166,9 +165,7 @@ scaffold-kadena/
 ├── packages/
 │   ├── hardhat/                      # Solidity contracts & deployment
 │   │   ├── contracts/                # Smart contract code
-│   │   ├── deploy/                   # Deployment scripts
-│   │   ├── devnet-accounts.json      # Funded development accounts
-│   │   ├── .env                      # Environment variables (create this)
+│   │   ├── .env.example              # Environment variables (copy this - see instructions above)
 │   │   └── hardhat.config.ts         # Multi-environment Hardhat configuration
 │   │
 │   └── nextjs/                       # Frontend application
@@ -176,6 +173,7 @@ scaffold-kadena/
 │       ├── pages/                    # Next.js pages
 │       ├── public/                   # Static assets
 │       ├── hooks/                    # Custom React hooks
+|       |__ .env.example              # Environment variables (copy this - see instructions above)
 │       ├── scaffold.config.ts        # Scaffold-ETH configuration
 │       └── next.config.js            # Next.js configuration
 ```

@@ -22,3 +22,5 @@ notes.md
 
 # cli
 dist
+packages/hardhat/.env.local
+packages/hardhat/.env.testnet

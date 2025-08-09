@@ -1,28 +1,49 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import { ethers, chainweb } from "hardhat";
 import { YourContract } from "../typechain-types";
+import type { DeployedContractsOnChains } from "@kadena/hardhat-chainweb/lib/utils";
 
 describe("YourContract", function () {
-  // We define a fixture to reuse the same setup in every test.
+  let deployments: DeployedContractsOnChains<YourContract>[];
 
   let yourContract: YourContract;
   before(async () => {
+    // Get signers for the first chain to set up the test
     const [owner] = await ethers.getSigners();
-    const yourContractFactory = await ethers.getContractFactory("YourContract");
-    yourContract = (await yourContractFactory.deploy(owner.address)) as YourContract;
-    await yourContract.waitForDeployment();
+    const deployed = await chainweb.deployContractOnChains<YourContract>({
+      name: "YourContract",
+      constructorArgs: [owner.address],
+    });
+
+    deployments = deployed.deployments;
   });
 
   describe("Deployment", function () {
     it("Should have the right message on deploy", async function () {
-      expect(await yourContract.greeting()).to.equal("Building Unstoppable Apps!!!");
+      // Use the chainweb plugin's runOverChains function to test on all chains.
+      // runOverChains switches from the default chain to each chain in the deployment for you.
+      await chainweb.runOverChains(async (chainId: number) => {
+        const deployment = deployments.find(d => d.chain === chainId);
+        expect(deployment).to.not.equal(undefined);
+        yourContract = deployment.contract;
+        expect(await yourContract.greeting()).to.equal("Build on Kadena!!!");
+      });
     });
 
     it("Should allow setting a new message", async function () {
       const newGreeting = "Learn Scaffold-ETH 2! :)";
 
-      await yourContract.setGreeting(newGreeting);
-      expect(await yourContract.greeting()).to.equal(newGreeting);
+      // Alternative: Use a regular for loop to loop over deployments
+      // You have switch chains yourself
+      for (const deployment of deployments) {
+        const { contract: yourContract, chain } = deployment;
+
+        // Make sure we're on the right chain before AND after the transaction
+        await chainweb.switchChain(chain);
+        const tx = await yourContract.setGreeting(newGreeting);
+        await tx.wait();
+        expect(await yourContract.greeting()).to.equal(newGreeting);
+      }
     });
   });
 });
