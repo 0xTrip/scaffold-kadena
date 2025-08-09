@@ -5,8 +5,8 @@ A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM networks
 ## ✨ Key Features
 
 **Kadena-Specific Dependencies:**
-- `@kadena/hardhat-chainweb` - For Kadena EVM chain interaction with multi-environment support
-- `@kadena/hardhat-kadena-create2` - For CREATE2 deployments on Kadena
+- `@kadena/hardhat-chainweb` - For simplified Kadena EVM chain interaction with multi-environment support and contract verification via blockscout
+- `@kadena/hardhat-kadena-create2` - For CREATE2 deployments on Kadena (if needed)
 
 **Multi-Environment Support:**
 - **Hardhat (Local)**

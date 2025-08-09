@@ -1,6 +1,6 @@
 import { defineChain } from "viem";
 
-// Add back the DEFAULT_ALCHEMY_API_KEY for compatibility
+// DEFAULT_ALCHEMY_API_KEY is incluided here for compatibility - although this is not needed
 export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 
 // Helper function to create Kadena chains

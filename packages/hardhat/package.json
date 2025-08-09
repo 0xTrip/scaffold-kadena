@@ -23,8 +23,8 @@
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
-    "@kadena/hardhat-chainweb": "^1.4.6",
-    "@kadena/hardhat-kadena-create2": "^1.0.1",
+    "@kadena/hardhat-chainweb": "^1.5.0",
+    "@kadena/hardhat-kadena-create2": "^1.1.0",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.7",
     "@nomicfoundation/hardhat-ethers": "^3.0.8",
     "@nomicfoundation/hardhat-ignition": "^0.15.5",
