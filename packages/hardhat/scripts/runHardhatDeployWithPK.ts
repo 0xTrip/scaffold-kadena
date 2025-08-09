@@ -83,12 +83,13 @@ async function main() {
     __RUNTIME_DEPLOYER_PRIVATE_KEY: decryptedPrivateKey,
   };
 
-  const chainwebNetwork = network.name.includes("testnet")
-    ? "testnet"
-    : network.name.includes("mainnet")
-      ? "mainnet"
-      : "testnet";
+  if (!network.name.includes("testnet")) {
+    console.error(`❌ Unsupported network: ${network.name}`);
+    console.error("Currently only testnet networks are supported");
+    process.exit(1);
+  }
 
+  const chainwebNetwork = "testnet";
   console.log("Using chainweb network:", chainwebNetwork);
 
   const chainwebArgs = ["--chainweb", chainwebNetwork];
