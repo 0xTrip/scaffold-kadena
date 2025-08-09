@@ -55,9 +55,9 @@ export type ScaffoldConfig = {
 };
 
 const scaffoldConfig = {
-  // Target networks - defaults to testnet, use NEXT_PUBLIC_USE_SANDBOX=true for localhost
+  // Target networks - defaults to testnet, use NEXT_PUBLIC_USE_LOCALHOST=true for localhost
   targetNetworks:
-    process.env.NEXT_PUBLIC_USE_SANDBOX === "true"
+    process.env.NEXT_PUBLIC_USE_LOCALHOST === "true"
       ? [kadenaLocalhost0, kadenaLocalhost1]
       : [kadenaTestnet20, kadenaTestnet21, kadenaTestnet22, kadenaTestnet23, kadenaTestnet24],
 
@@ -71,7 +71,7 @@ const scaffoldConfig = {
   walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "3a8170812b534d0ff9d794f19a901d64",
 
   // Use local burner wallet only in localhost mode
-  onlyLocalBurnerWallet: process.env.NEXT_PUBLIC_USE_SANDBOX === "true",
+  onlyLocalBurnerWallet: process.env.NEXT_PUBLIC_USE_LOCALHOST === "true",
 } as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;
