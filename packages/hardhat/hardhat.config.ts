@@ -21,10 +21,11 @@ const config: HardhatUserConfig = {
   chainweb: {
     hardhat: {
       chains: 2,
+      logging: "info",
       networkOptions: {
         forking: {
-          url: `https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
-          enabled: process.env.MAINNET_FORKING_ENABLED === "true",
+          url: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/20/evm/rpc`,
+          enabled: process.env.TESTNET_FORKING_ENABLED === "true",
         },
       },
     },
