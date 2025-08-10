@@ -30,28 +30,29 @@ cd scaffold-kadena
 ```
 
 ### 2. Install dependencies
-
 ```bash
 yarn install
 ```
 
-### 4. Run a local Hardhat chain in the first terminal:
+## Running on localhost
+### 1. Run a local Hardhat chain in the first terminal:
 
-```
+```bash
 yarn chain
 ```
 
-### 5. In a second terminal, deploy the contract to localhost:
+### 2. In a SECOND terminal, deploy the contract to localhost:
 
-```
+```bash
+cd scaffold-kadena
 yarn deploy:localhost
 ```
 
-### 6. In a third terminal, start your NextJS app:
+### 3. In a THIRD terminal, start your NextJS app:
 First setup the nextjs env file:
 
 ```bash
-cd packages/nextjs
+cd scaffold-kadena/packages/nextjs
 cp .env.example .env
 ```
 
@@ -62,17 +63,40 @@ yarn start
 
 Your application will be available at: http://localhost:3000
 
-### 7:  🦊 Connect MetaMask to Kadena Hardhat localhost:
-In the fronted, click on the "Connect Wallet" button in the top right corner. Follow the prompt to add Kadena Localhost Chain 0. Repeat the same for Kadena Localhost Chain 1.
-
+### 4:  🦊 Connect MetaMask to Kadena Hardhat localhost:
+Open a browser where you have MetaMask installed
 Configure the known Hardhat account 0 and account 1 by importing the following private keys into MetaMask:
 * account 0: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 * account 1: 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
 
+In MetaMask, you accomplish this by clickig the active account and then clicking the `Add account or hardhare wallet button`.
+Select `Private Key` from the list. Copy and paste the account0 private key. Repeat for account 1.
+
+In the frontend (http://localhost:3000), click on the "Connect Wallet" button in the top right corner. Follow the prompt to add Kadena Localhost Chain 0. Repeat for Kadena localhost chain 1 by clicking on the wallet addres that is now connected. click "Switch Network" in the drop-down menu and follow the prompt to add (switch to) Kadena Localhost 1. You can now switch between the chains in MetMask.
+
+### 5:  Interact with the smart contract
+Click on on `Debug Contracts` in the top left corner or on the main page. You may have to click this twice. Interact with the 
+`packages/hardhat/contracts/YourContract.sol`.
+
 ## Running against Kadena Testnet Chains
-### 1. In a terminal, deploy to Kadena testnet chains using CREATE2 and verify contracts by running
+### 1. First setup the Hardhat env file:
+
+```bash
+cd scaffold-kadena/packages/hardhat
+cp .env.example .env
 
 ```
+### 2. In the SECOND terminal (where you previously ran `yarn deploy:localhost`), deploy to all Kadena testnet chains using CREATE2 and verify contracts by running
+
+Return to the root directory
+
+```bash
+cd ../../
+
+```
+run 
+```bash
+
 yarn deploy:testnet
 
 ```
@@ -87,12 +111,12 @@ in `packages/hardhat/.env `with your own private key.
 
 Another option is to use an encrypted private key by either importing and encrypting your own private key:
 
-```
+```bash
 yarn account:import
 
 ```
 or letting the project generate an encrypted private key for you:
-```
+```bash
 yarn account:generate
 
 ```
@@ -187,7 +211,8 @@ This repository is forked from Scaffold-ETH 2. In depth usage instructions can b
 ## 📚 Additional Resources
 
 - [Kadena Documentation](https://docs.kadena.io/)
-- [Hardhat Kadena Plugin](https://github.com/kadena-io/hardhat-kadena-plugin)
+- [Hardhat Kadena Plugin](https://www.npmjs.com/package/@kadena/hardhat-chainweb)
+- [Hardhat Kadena Create2 Plugin](https://www.npmjs.com/package/@kadena/hardhat-kadena-create2)
 
 ## Troubleshooting Known Issues
 
