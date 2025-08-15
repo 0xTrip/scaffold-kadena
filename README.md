@@ -100,6 +100,9 @@ run
 yarn deploy:testnet
 
 ```
+
+Note: After you run the deploy command to deploy your contracts deterministically using [CREATE2](https://medium.com/@joichiro.sai/what-is-create2-a-guide-to-pre-determining-smart-contract-addresses-in-ethereum-deec22e70a6f), subsequent `yarn deploy:testnet` commands will report that the contract is already deployed and will not redeploy it if you haven't modified the code. To deploy the same code to a different address, you can change the salt in the deployment [script](https://github.com/0xTrip/scaffold-kadena/blob/a09908dae654f3a3d4a21cfa601f9f474cabb60e/packages/hardhat/scripts/deployToRemoteChains.ts#L20https://github.com/0xTrip/scaffold-kadena/blob/a09908dae654f3a3d4a21cfa601f9f474cabb60e/packages/hardhat/scripts/deployToRemoteChains.ts#L20).
+
 ### 1a. By default, we have configured the .env.example file to have the default Hardhat account configured. 
 We have pre-funded this account to have KDA on all Kadena Testnet chains. The PK below corresponds to 
 `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`
