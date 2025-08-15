@@ -65,6 +65,7 @@ Your application will be available at: http://localhost:3000
 
 ### 4:  🦊 Connect MetaMask to Kadena Hardhat localhost:
 Open a browser where you have MetaMask installed
+
 Configure the known Hardhat account 0 and account 1 by importing the following private keys into MetaMask:
 * account 0: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 * account 1: 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
