@@ -65,6 +65,7 @@ Your application will be available at: http://localhost:3000
 
 ### 4:  🦊 Connect MetaMask to Kadena Hardhat localhost:
 Open a browser where you have MetaMask installed
+
 Configure the known Hardhat account 0 and account 1 by importing the following private keys into MetaMask:
 * account 0: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 * account 1: 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
@@ -86,7 +87,30 @@ cd scaffold-kadena/packages/hardhat
 cp .env.example .env
 
 ```
-### 2. In the SECOND terminal (where you previously ran `yarn deploy:localhost`), deploy to all Kadena testnet chains using CREATE2 and verify contracts by running
+
+### 2. Configure your deployer account
+Scaffoled-eth2 (the project from which this template is forked), provides the possibility of deploying using an unencrypted or encrypted private key.
+
+If you want to deploy your contract using your own account with an unencrypted key, you should replace the `DEPLOYER_PRIVATE_KEY `value
+in `packages/hardhat/.env `with your own private key.
+
+Another option is to use an encrypted private key by either importing and encrypting your own private key:
+
+```bash
+yarn account:import
+
+```
+or letting the project generate an encrypted private key (and associated address) for you:
+```bash
+yarn account:generate
+
+```
+Both of these options will populate a value for `DEPLOYER_PRIVATE_KEY_ENCRYPTED` in your `packages/hardhat/.env` file (which you should have created in step 1 above).
+
+In both of thse scenarios, you will need to fund your account on all Kadena Testnet chains using the Kadena EVM [faucet](https://tools.kadena.io/faucet/evm)
+
+
+### 3. In the SECOND terminal (where you previously ran `yarn deploy:localhost`), deploy to all Kadena testnet chains using CREATE2 and verify contracts by running
 
 Return to the root directory
 
@@ -100,37 +124,20 @@ run
 yarn deploy:testnet
 
 ```
-### 1a. By default, we have configured the .env.example file to have the default Hardhat account configured. 
-We have pre-funded this account to have KDA on all Kadena Testnet chains. The PK below corresponds to 
-`0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`
-
-`DEPLOYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`
-
-Note that if you want to deploy your contract using your own account, you should replace the `DEPLOYER_PRIVATE_KEY `value
-in `packages/hardhat/.env `with your own private key.
-
-Another option is to use an encrypted private key by either importing and encrypting your own private key:
-
-```bash
-yarn account:import
-
-```
-or letting the project generate an encrypted private key for you:
-```bash
-yarn account:generate
-
-```
-
-In both of thse scenarios, you will need to fund your account on all Kadena Testnet chains using the Kadena EVM [faucet](https://tools.kadena.io/faucet/evm)
 
 
-### 2. Modify the frontend to run against testnet
+Note: After you run the deploy command to deploy your contracts deterministically using [CREATE2](https://medium.com/@joichiro.sai/what-is-create2-a-guide-to-pre-determining-smart-contract-addresses-in-ethereum-deec22e70a6f), subsequent `yarn deploy:testnet` commands will report that the contract is already deployed and will not redeploy it if you haven't modified the code. To deploy the same code to a different address, you can change the salt in the deployment [script](https://github.com/0xTrip/scaffold-kadena/blob/a09908dae654f3a3d4a21cfa601f9f474cabb60e/packages/hardhat/scripts/deployToRemoteChains.ts#L20https://github.com/0xTrip/scaffold-kadena/blob/a09908dae654f3a3d4a21cfa601f9f474cabb60e/packages/hardhat/scripts/deployToRemoteChains.ts#L20).
+
+Note also that if you prefer to not deploy deterministically, you can modify the `packages/hardhat/scripts/deployToRemoteChains.ts` to use `chainweb.deployContractOnChains`, as is currently being demonstrated for local deployments in the packages/hardhat/scripts/runHardhatDeployWithPK.ts [script](https://github.com/0xTrip/scaffold-kadena/blob/a46c71a16b4d282208037e255fc89eb740ece536/packages/hardhat/scripts/runHardhatDeployWithPK.ts#L33).
+
+
+### 4. Modify the frontend to run against testnet
 * cd to packages/nextjs
 * Change `NEXT_PUBLIC_USE_LOCALHOST=true` to `false`
 * The frontend should automatically update to point to testnet
 
 
-### 3. 🦊 Connect MetaMask to Kadena Testnet Chains
+### 5. 🦊 Connect MetaMask to Kadena Testnet Chains
 
 The project supports **5 chains per environment**. Add any or all of them to MetaMask.
 The Kadena Testnet Explorer has a button that you can use to easily add the chains to MetaMask.
