@@ -4,3 +4,16 @@ out = "out"
 libs = ["lib"]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+
+evm_version = "prague"
+optimizer = true
+optimizer_runs = 1000
+
+[rpc_endpoints]
+localhost = "http://127.0.0.1:8545"
+# Kadena Testnet chains
+testnet20 = "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/20/evm/rpc"
+testnet21 = "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/21/evm/rpc"
+testnet22 = "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/22/evm/rpc"
+testnet23 = "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/23/evm/rpc"
+testnet24 = "https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/24/evm/rpc"
