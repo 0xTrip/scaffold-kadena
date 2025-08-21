@@ -1,23 +1,31 @@
-# 🏗 Scaffold Kadena (EVM Chains)
+# 🏗 Scaffold Kadena (EVM Chains) - Foundry Edition
 
-A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM networks, making it easier to build and deploy dApps on Kadena's blockchain across multiple environments.
+A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM networks using **Foundry** instead of Hardhat. This provides a modern, fast, and efficient development experience for building and deploying dApps on Kadena's blockchain across multiple environments.
 
 ## ✨ Key Features
 
-**Kadena-Specific Dependencies:**
-- `@kadena/hardhat-chainweb` - For simplified Kadena EVM chain interaction with multi-environment support and contract verification via blockscout
-- `@kadena/hardhat-kadena-create2` - For CREATE2 deployments on Kadena (if needed)
+**Foundry-Based Development:**
+- **Forge** - Fast contract compilation and testing
+- **Cast** - Command-line contract interaction
+- **Anvil** - Local blockchain node for development
+- **Foundry Standard Library** - Battle-tested testing utilities
+
+**Kadena-Specific Integration:**
+- `kadena-io/foundry-chainweb` - Multi-chain deployment and interaction with Kadena EVM
+- Multi-environment support for local, sandbox, and testnet deployments
+- Automatic contract verification on Blockscout
 
 **Multi-Environment Support:**
-- **Hardhat (Local)**
-- **[Sandbox](https://github.com/kadena-io/kadena-evm-sandbox) (Local):** `http://localhost:1848` - For local development with testnet constraints
-- **Testnet:** `https://evm-testnet.chainweb.com` - For production testing
+- **Anvil (Local)** - Fast local development chains
+- **Sandbox (Local)** - Local development with testnet constraints
+- **Testnet** - Production testing on Kadena EVM testnet
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - [Node (>= v20.18.3)](https://nodejs.org/en/)
+- [Foundry](https://getfoundry.sh/) - Install with `curl -L https://foundry.paradigm.xyz | bash`
 - Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
 - [MetaMask](https://metamask.io/) browser extension
@@ -30,209 +38,237 @@ cd scaffold-kadena
 ```
 
 ### 2. Install dependencies
+
 ```bash
 yarn install
 ```
 
-## Running on localhost
-### 1. Run a local Hardhat chain in the first terminal:
+### 3. Install Foundry dependencies
 
 ```bash
-yarn chain
+cd packages/foundry
+forge install
+cd ../..
 ```
 
-### 2. In a SECOND terminal, deploy the contract to localhost:
+## 🏃‍♂️ Running Locally
+
+### 1. Start local Anvil chains
 
 ```bash
-cd scaffold-kadena
-yarn deploy:localhost
+# Start Anvil with multiple chains (in background)
+anvil --chain-id 31337 --port 8545 &
+anvil --chain-id 31338 --port 8546 &
 ```
 
-### 3. In a THIRD terminal, start your NextJS app:
-First setup the nextjs env file:
+### 2. Deploy contracts to local chains
 
 ```bash
-cd scaffold-kadena/packages/nextjs
+# Set your deployer private key
+export DEPLOYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+
+# Deploy to local chains
+yarn forge:deploy:anvil
+```
+
+### 3. Generate frontend contract artifacts
+
+```bash
+yarn forge:gen-contracts
+```
+
+### 4. Start the Next.js frontend
+
+```bash
+# Setup environment
+cd packages/nextjs
 cp .env.example .env
-```
+cd ../..
 
-Then run from that directory or the top level directory
-```bash
+# Start the app
 yarn start
 ```
 
 Your application will be available at: http://localhost:3000
 
-### 4:  🦊 Connect MetaMask to Kadena Hardhat localhost:
-Open a browser where you have MetaMask installed
+### 5. 🦊 Connect MetaMask to local chains
 
-Configure the known Hardhat account 0 and account 1 by importing the following private keys into MetaMask:
-* account 0: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-* account 1: 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
+Configure MetaMask with the local chains:
 
-In MetaMask, you accomplish this by clickig the active account and then clicking the `Add account or hardhare wallet button`.
-Select `Private Key` from the list. Copy and paste the account0 private key. Repeat for account 1.
+**Chain 31337 (Port 8545):**
+- Chain ID: `31337`
+- RPC URL: `http://127.0.0.1:8545`
+- Currency Symbol: `ETH`
 
-In the frontend (http://localhost:3000), click on the "Connect Wallet" button in the top right corner. Follow the prompt to add Kadena Localhost Chain 0. Repeat for Kadena localhost chain 1 by clicking on the wallet addres that is now connected. click "Switch Network" in the drop-down menu and follow the prompt to add (switch to) Kadena Localhost 1. You can now switch between the chains in MetMask.
+**Chain 31338 (Port 8546):**
+- Chain ID: `31338`
+- RPC URL: `http://127.0.0.1:8546`
+- Currency Symbol: `ETH`
 
-### 5:  Interact with the smart contract
-Click on on `Debug Contracts` in the top left corner or on the main page. You may have to click this twice. Interact with the 
-`packages/hardhat/contracts/YourContract.sol`.
+Import the test accounts using these private keys:
+- Account 0: `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`
+- Account 1: `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
 
-## Running against Kadena Testnet Chains
-### 1. First setup the Hardhat env file:
+### 6. Interact with smart contracts
 
-```bash
-cd scaffold-kadena/packages/hardhat
-cp .env.example .env
+Navigate to the "Debug Contracts" page and interact with `YourContract.sol`.
 
-```
+## 🌐 Deploying to Kadena Testnet
 
-### 2. Configure your deployer account
-Scaffoled-eth2 (the project from which this template is forked), provides the possibility of deploying using an unencrypted or encrypted private key.
-
-If you want to deploy your contract using your own account with an unencrypted key, you should replace the `DEPLOYER_PRIVATE_KEY `value
-in `packages/hardhat/.env `with your own private key.
-
-Another option is to use an encrypted private key by either importing and encrypting your own private key:
+### 1. Setup environment variables
 
 ```bash
-yarn account:import
+# Set your deployer private key (fund your account first!)
+export DEPLOYER_PRIVATE_KEY=your_private_key_here
 
+# Set Blockscout API key for verification
+export BLOCKSCOUT_API_KEY=your_api_key_here
 ```
-or letting the project generate an encrypted private key (and associated address) for you:
-```bash
-yarn account:generate
 
-```
-Both of these options will populate a value for `DEPLOYER_PRIVATE_KEY_ENCRYPTED` in your `packages/hardhat/.env` file (which you should have created in step 1 above).
-
-In both of thse scenarios, you will need to fund your account on all Kadena Testnet chains using the Kadena EVM [faucet](https://tools.kadena.io/faucet/evm)
-
-
-### 3. In the SECOND terminal (where you previously ran `yarn deploy:localhost`), deploy to all Kadena testnet chains using CREATE2 and verify contracts by running
-
-Return to the root directory
+### 2. Deploy to testnet
 
 ```bash
-cd ../../
-
+# Deploy to all Kadena testnet chains
+yarn forge:deploy:testnet
 ```
-run 
+
+### 3. Verify contracts
+
 ```bash
-
-yarn deploy:testnet
-
+# Verify on a specific chain
+cd packages/foundry/script
+./verify.sh <CONTRACT_ADDRESS> YourContract 5920
 ```
 
+### 4. Generate frontend artifacts
 
-Note: After you run the deploy command to deploy your contracts deterministically using [CREATE2](https://medium.com/@joichiro.sai/what-is-create2-a-guide-to-pre-determining-smart-contract-addresses-in-ethereum-deec22e70a6f), subsequent `yarn deploy:testnet` commands will report that the contract is already deployed and will not redeploy it if you haven't modified the code. To deploy the same code to a different address, you can change the salt in the deployment [script](https://github.com/0xTrip/scaffold-kadena/blob/a09908dae654f3a3d4a21cfa601f9f474cabb60e/packages/hardhat/scripts/deployToRemoteChains.ts#L20https://github.com/0xTrip/scaffold-kadena/blob/a09908dae654f3a3d4a21cfa601f9f474cabb60e/packages/hardhat/scripts/deployToRemoteChains.ts#L20).
+```bash
+yarn forge:gen-contracts
+```
 
-Note also that if you prefer to not deploy deterministically, you can modify the `packages/hardhat/scripts/deployToRemoteChains.ts` to use `chainweb.deployContractOnChains`, as is currently being demonstrated for local deployments in the packages/hardhat/scripts/runHardhatDeployWithPK.ts [script](https://github.com/0xTrip/scaffold-kadena/blob/a46c71a16b4d282208037e255fc89eb740ece536/packages/hardhat/scripts/runHardhatDeployWithPK.ts#L33).
+### 5. 🦊 Connect MetaMask to Kadena Testnet
 
+Add the testnet chains to MetaMask:
 
-### 4. Modify the frontend to run against testnet
-* cd to packages/nextjs
-* Change `NEXT_PUBLIC_USE_LOCALHOST=true` to `false`
-* The frontend should automatically update to point to testnet
+**Chain 20:**
+- Chain ID: `5920`
+- RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/20/evm/rpc`
+- Explorer: `https://chain-20.evm-testnet-blockscout.chainweb.com/`
 
+**Chain 21:**
+- Chain ID: `5921`
+- RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/21/evm/rpc`
+- Explorer: `https://chain-21.evm-testnet-blockscout.chainweb.com/`
 
-### 5. 🦊 Connect MetaMask to Kadena Testnet Chains
+**Chain 22:**
+- Chain ID: `5922`
+- RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/22/evm/rpc`
+- Explorer: `https://chain-22.evm-testnet-blockscout.chainweb.com/`
 
-The project supports **5 chains per environment**. Add any or all of them to MetaMask.
-The Kadena Testnet Explorer has a button that you can use to easily add the chains to MetaMask.
-To do this, first go tho the block explorer for Kadena Testnet Chain [20](https://chain-20.evm-testnet-blockscout.chainweb.com/).  Scroll down to the bottom of the page, and click on the `Add testnet@chain20` button.
+**Chain 23:**
+- Chain ID: `5923`
+- RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/23/evm/rpc`
+- Explorer: `https://chain-23.evm-testnet-blockscout.chainweb.com/`
 
-Swtich to chain 21 using one of the drop-downs at the top of the page. Scroll to the botom and click the 
-`Add testnet@chain21` button.
-
-Repeat for chains 22 - 24.
-
-To manually configure the Kadena Testnet chains, add the chains below as custom networks in MetaMask
-
-### Testnet (Production Testing)
-- **Chain 20**:
-  - **Chain ID**: `5920`
-  - **RPC**: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/20/evm/rpc`
-  - **Block Explorer**: `http://chain-20.evm-testnet-blockscout.chainweb.com/`
-
-### Other Chains
-
-- **Chain 21**:
-  - **Chain ID**: `5921`
-  - **RPC**: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/21/evm/rpc`
-  - **Block Explorer**: `http://chain-21.evm-testnet-blockscout.chainweb.com/`
-
-- **Chain 22**:
-  - **Chain ID**: `5922`
-  - **RPC**: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/22/evm/rpc`
-  - **Block Explorer**: `http://chain-22.evm-testnet-blockscout.chainweb.com/`
-
-- **Chain 23**:
-  - **Chain ID**: `5923`
-  - **RPC**: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/23/evm/rpc`
-  - **Block Explorer**: `http://chain-23.evm-testnet-blockscout.chainweb.com/`
-
-- **Chain 24**:
-  - **Chain ID**: `5924`
-  - **RPC**: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/24/evm/rpc`
-  - **Block Explorer**: `http://chain-24.evm-testnet-blockscout.chainweb.com/`
-
+**Chain 24:**
+- Chain ID: `5924`
+- RPC: `https://evm-testnet.chainweb.com/chainweb/0.0/evm-testnet/chain/24/evm/rpc`
+- Explorer: `https://chain-24.evm-testnet-blockscout.chainweb.com/`
 
 **For all networks:**
-- **Currency Symbol**: KDA
+- Currency Symbol: `KDA`
 
-## 🔍 Contract Verification & Block Explorers
+## 🛠 Available Commands
 
-Each chain has its own Blockscout instance for contract verification, replace ```ChainId``` with target chain ID:
+### Foundry Commands
+- `yarn forge:build` - Build contracts
+- `yarn forge:test` - Run tests with verbose output
+- `yarn forge:deploy:anvil` - Deploy to local Anvil chains
+- `yarn forge:deploy:testnet` - Deploy to Kadena testnet
+- `yarn forge:gen-contracts` - Generate frontend contract artifacts
+- `yarn forge:verify:testnet` - Verify contracts on testnet
 
-- **Testnet**: `http://chain-<ChainId>.evm-testnet-blockscout.chainweb.com/` 
-
+### Standard Commands
+- `yarn build` - Build contracts (aliased to `forge:build`)
+- `yarn compile` - Compile contracts (aliased to `forge:build`)
+- `yarn deploy` - Deploy to local chains (aliased to `forge:deploy:anvil`)
+- `yarn test` - Run tests (aliased to `forge:test`)
+- `yarn start` - Start the Next.js frontend
 
 ## 🔍 Project Structure
 
 ```
 scaffold-kadena/
 ├── packages/
-│   ├── hardhat/                      # Solidity contracts & deployment
-│   │   ├── contracts/                # Smart contract code
-│   │   ├── .env.example              # Environment variables (copy this - see instructions above)
-│   │   └── hardhat.config.ts         # Multi-environment Hardhat configuration
+│   ├── foundry/                      # Foundry workspace
+│   │   ├── src/                      # Smart contract source code
+│   │   ├── script/                   # Deployment & verification scripts
+│   │   ├── test/                     # Contract tests
+│   │   ├── foundry.toml             # Foundry configuration
+│   │   ├── remappings.txt           # Solidity import remappings
+│   │   └── chainweb.config.json     # Kadena chain configuration
 │   │
 │   └── nextjs/                       # Frontend application
 │       ├── components/               # React components
 │       ├── pages/                    # Next.js pages
 │       ├── public/                   # Static assets
 │       ├── hooks/                    # Custom React hooks
-|       |__ .env.example              # Environment variables (copy this - see instructions above)
+│       ├── contracts/                # Auto-generated contract artifacts
+│       ├── .env.example              # Environment variables
 │       ├── scaffold.config.ts        # Scaffold-ETH configuration
 │       └── next.config.js            # Next.js configuration
+│
+├── chainweb.config.json              # Root chain configuration
+└── package.json                      # Root package configuration
 ```
 
-## 📙 Docs
+## 🔧 Configuration Files
 
-This repository is forked from Scaffold-ETH 2. In depth usage instructions can be found here:
+### `foundry.toml`
+Foundry configuration with Kadena EVM settings, RPC endpoints, and FFI permissions.
 
- - [Scaffold-ETH 2 Documentation](https://docs.scaffoldeth.io/)
+### `chainweb.config.json`
+Kadena chain configuration for different environments (anvil, sandbox, testnet).
+
+### `remappings.txt`
+Solidity import remappings for the `foundry-chainweb` plugin.
 
 ## 📚 Additional Resources
 
+- [Foundry Book](https://book.getfoundry.sh/)
 - [Kadena Documentation](https://docs.kadena.io/)
-- [Hardhat Kadena Plugin](https://www.npmjs.com/package/@kadena/hardhat-chainweb)
-- [Hardhat Kadena Create2 Plugin](https://www.npmjs.com/package/@kadena/hardhat-kadena-create2)
+- [Foundry Chainweb Plugin](https://github.com/kadena-io/foundry-chainweb)
+- [Scaffold-ETH 2 Documentation](https://docs.scaffoldeth.io/)
 
-## Troubleshooting Known Issues
+## 🚨 Troubleshooting
 
-If you see SWC dependency warnings when starting the frontend:
+### Common Issues
 
-```bash
-# Stop the dev server and again run:
-yarn install
-yarn start
-```
+**Contract verification fails:**
+- Ensure `BLOCKSCOUT_API_KEY` is set
+- Check that the contract address exists on the target chain
+- Verify the compiler version matches your deployment
+
+**Deployment fails:**
+- Check that `DEPLOYER_PRIVATE_KEY` is set
+- Ensure your account has sufficient KDA for gas fees
+- Verify the RPC endpoints are accessible
+
+**Frontend can't find contracts:**
+- Run `yarn forge:gen-contracts` after deployment
+- Check that `deployedContracts.ts` was generated correctly
+
+### Getting Help
+
+- Check the [Foundry Book](https://book.getfoundry.sh/) for Foundry-specific issues
+- Review [Kadena EVM documentation](https://docs.kadena.io/) for network-specific questions
+- Open an issue on the repository for scaffold-specific problems
+
 ## 🙏 Acknowledgments
 
 - BuidlGuidl and the Scaffold-ETH team for the original framework
+- Paradigm for creating Foundry
+- Kadena team for EVM support and tooling
 
 ## 📄 License
 
@@ -241,3 +277,5 @@ MIT
 ---
 
 Made with ❤️ by [SolidityDegen](https://x.com/SolidityDegen)
+
+*Migrated from Hardhat to Foundry for improved performance and developer experience.*
