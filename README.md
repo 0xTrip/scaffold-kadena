@@ -2,8 +2,6 @@
 
 A custom fork of Scaffold-ETH 2 with specialized support for Kadena EVM networks, making it easier to build and deploy dApps on Kadena's blockchain across multiple environments.
 
-## ✨ Key Features
-
 **Kadena-Specific Dependencies:**
 - `@kadena/hardhat-chainweb` - For simplified Kadena EVM chain interaction with multi-environment support and contract verification via blockscout
 - `@kadena/hardhat-kadena-create2` - For CREATE2 deployments on Kadena (if needed)
@@ -35,7 +33,7 @@ yarn install
 ```
 
 ## Running on localhost
-### 1. Run a local Hardhat chain in the first terminal:
+### 1. Run two local Hardhat chains in the first terminal:
 
 ```bash
 yarn chain
