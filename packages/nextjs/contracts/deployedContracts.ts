@@ -5,9 +5,9 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  "626000": {
+  "5920": {
     YourContract: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xEE1cde161e6b239a86c1574a07c8b6AC4a7Cb65c",
       abi: [
         {
           inputs: [
@@ -149,9 +149,9 @@ const deployedContracts = {
       ],
     },
   },
-  "626001": {
+  "5921": {
     YourContract: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xEE1cde161e6b239a86c1574a07c8b6AC4a7Cb65c",
       abi: [
         {
           inputs: [
@@ -293,9 +293,9 @@ const deployedContracts = {
       ],
     },
   },
-  "626002": {
+  "5922": {
     YourContract: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xEE1cde161e6b239a86c1574a07c8b6AC4a7Cb65c",
       abi: [
         {
           inputs: [
@@ -437,9 +437,9 @@ const deployedContracts = {
       ],
     },
   },
-  "626003": {
+  "5923": {
     YourContract: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xEE1cde161e6b239a86c1574a07c8b6AC4a7Cb65c",
       abi: [
         {
           inputs: [
@@ -581,9 +581,9 @@ const deployedContracts = {
       ],
     },
   },
-  "626004": {
+  "5924": {
     YourContract: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xEE1cde161e6b239a86c1574a07c8b6AC4a7Cb65c",
       abi: [
         {
           inputs: [
